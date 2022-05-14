@@ -9,18 +9,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull : false
       },
       start_date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
       end_date:{
-        type: DataTypes.DATE
+        type: Sequelize.DATE
       },
       province:{
-        type: DataTypes.ENUM,
+        type: Sequelize.ENUM,
         values: [
         'حلب',
         'رقة',
@@ -40,7 +40,7 @@ module.exports = {
         allowNull: false
       },
       project_type:{
-        type: DataTypes.ENUM,
+        type: Sequelize.ENUM,
         values: [
           'خاص',
           'عام'
@@ -48,7 +48,7 @@ module.exports = {
         allowNull: false
       },
       target_money:{
-        type: DataTypes.BIGINT
+        type: Sequelize.BIGINT
       },
       createdAt: {
         allowNull: false,
