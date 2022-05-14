@@ -26,8 +26,6 @@ module.exports = (sequelize, DataTypes) => {
     end_date: {
       type: DataTypes.DATE,
     }
-    //TODO: foreign key
-    
   }, {
     sequelize,
     modelName: 'Activity',

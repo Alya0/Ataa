@@ -5,18 +5,12 @@ const express = require('express');
 const app = express();
 
 const database = require('./models')
-const Project = require('./models/project')
 
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(express.json());
 
-
-app.get('/', (req,res)=>{
- console.log(Project)
-	res.send('hello')
-})
 
 //middleware
 app.use(notFoundMiddleware);
