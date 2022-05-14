@@ -2,7 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const project = require('./project');
 module.exports = (sequelize, DataTypes) => {
   class Activity extends Model {
     /**

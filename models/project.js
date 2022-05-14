@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Project.hasMany(models.Activity, {
+        onDelete: "cascade"
+      })
     }
   }
   Project.init({
