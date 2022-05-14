@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     children_number:{
-      type: DataTypes.INT,
+      type: DataTypes.INTEGER,
       defaultValue: 0
     },
     job:{
@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     salary:{
-      type: DataTypes.INT,
+      type: DataTypes.INTEGER,
       defaultValue: 0,
       allowNull: false
     },

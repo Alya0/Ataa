@@ -11,6 +11,11 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(express.json());
 
+
+app.get('/', (req,res)=>{
+	res.send('hello')
+})
+
 //middleware
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

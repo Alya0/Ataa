@@ -51,7 +51,7 @@ module.exports = {
         allowNull: false
       },
       children_number:{
-        type: Sequelize.INT,
+        type: Sequelize.INTEGER,
         defaultValue: 0
       },
       job:{
@@ -59,7 +59,7 @@ module.exports = {
         allowNull: false
       },
       salary:{
-        type: Sequelize.INT,
+        type: Sequelize.INTEGER,
         defaultValue: 0,
         allowNull: false
       },

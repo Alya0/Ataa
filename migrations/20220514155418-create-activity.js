@@ -11,6 +11,14 @@ module.exports = {
       active: {
         type: Sequelize.BOOLEAN
       },
+						start_date:{
+							type: DataTypes.DATE,
+							defaultValue: DataTypes.NOW,
+							allowNull: false,
+					},
+					end_date: {
+							type: DataTypes.DATE,
+					},
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -26,15 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     end_date: {
       type: DataTypes.DATE,
-    },
-    project_id:{
-      type: DataTypes.INT,
-      references:{
-        model: project,
-        key: 'id'
-      }
     }
-    //TODO: add employee foreign key
+    //TODO: foreign key
     
   }, {
     sequelize,
