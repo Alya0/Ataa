@@ -15,11 +15,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       phone:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       password:{
-        type: DataTypes.TEXT,
+        type: Sequelize.TEXT,
         allowNull: false
       },
       createdAt: {

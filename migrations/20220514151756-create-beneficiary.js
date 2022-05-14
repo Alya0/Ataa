@@ -9,23 +9,23 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       full_name: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       ID_number:{
-        type: DataTypes.STRING, 
+        type: Sequelize.STRING, 
         allowNull: false
       },
       phone_number:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       birth_date:{
-        type: DataTypes.DATE,
+        type: Sequelize.DATE,
         allowNull: false
       },
       gender:{
-        type: DataTypes.ENUM,
+        type: Sequelize.ENUM,
         values:[
           'انثى',
           'ذكر',
@@ -37,7 +37,7 @@ module.exports = {
         allowNull: false
       },
       marital_status:{
-        type: DataTypes.ENUM,
+        type: Sequelize.ENUM,
         values:[
           'أعزب',
           'متزوج',
@@ -51,20 +51,20 @@ module.exports = {
         allowNull: false
       },
       children_number:{
-        type: DataTypes.INT,
+        type: Sequelize.INT,
         defaultValue: 0
       },
       job:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       salary:{
-        type: DataTypes.INT,
+        type: Sequelize.INT,
         defaultValue: 0,
         allowNull: false
       },
       province:{
-        type: DataTypes.ENUM,
+        type: Sequelize.ENUM,
         values: [
         'حلب',
         'رقة',
@@ -84,22 +84,22 @@ module.exports = {
         allowNull: false
       },
       area:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       address:{
-        type: DataTypes.TEXT,
+        type: Sequelize.TEXT,
         allowNull: false
       },
       description:{
-        type: DataTypes.TEXT
+        type: Sequelize.TEXT
       },
       health_status:{
-        type: DataTypes.TEXT,
+        type: Sequelize.TEXT,
         defaultValue: 'خالي من الامراض السارية و المعدية'
       },
       residential_status:{
-        type: DataTypes.ENUM,
+        type: Sequelize.ENUM,
         values: [
           'ملك',
           'اجار'
