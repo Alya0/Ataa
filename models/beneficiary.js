@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Beneficiary.hasMany(models.Benefit, {
+        onDelete: "cascade"
+      })
+
+      Beneficiary.hasMany(models.Ben_Cat, {
+        onDelete: "cascade"
+      })
     }
   }
   Beneficiary.init({

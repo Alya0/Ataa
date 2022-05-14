@@ -14,6 +14,18 @@ module.exports = (sequelize, DataTypes) => {
       Project.hasMany(models.Activity, {
         onDelete: "cascade"
       })
+
+      Project.hasMany(models.Donation, {
+        onDelete: "cascade"
+      })
+
+      Project.hasMany(models.Pro_Cat, {
+        onDelete: "cascade"
+      })
+
+      Project.hasMany(models.Benefit, {
+        onDelete: "cascade"
+      })
     }
   }
   Project.init({
