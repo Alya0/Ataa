@@ -34,8 +34,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     birth_date:{
-      type: DataTypes.DATE,
-      allowNull: false
+      type: DataTypes.DATEONLY,
+      // allowNull: false
+      set(value){
+        const jsDate = new Date(value)
+        this.setDataValue('birth_date', jsDate)
+      }
     },
     gender:{
       type: DataTypes.ENUM,

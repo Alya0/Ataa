@@ -1,4 +1,5 @@
-
+const {Beneficiary} = require('../models')
+const StatusCodes = require('http-status-codes')
 
 const getAll = async(req, res)=>{
 	const {status} = req.params
@@ -6,7 +7,9 @@ const getAll = async(req, res)=>{
 }
 
 const create = async(req, res)=>{
-	res.json({msg:'createte'})
+	console.log(req.body)
+	const beneficiary = Beneficiary.create({...req.body})
+	res.status(StatusCodes.CREATED).json({beneficiary})
 }
 
 const edit = async(req, res)=>{
