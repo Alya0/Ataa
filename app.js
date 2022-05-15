@@ -5,16 +5,18 @@ const express = require('express');
 const app = express();
 
 const database = require('./models')
+cosnt webRouter = require('./routes/WebRouter')
 
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(express.json());
 
-
 //middleware
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
+
+app.use('/api/w', )
 
 const port = process.env.PORT || 3000;
 
