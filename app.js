@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 
 const database = require('./models')
-cosnt webRouter = require('./routes/WebRouter')
+const webRouter = require('./routes/WebRouter')
 
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-app.use('/api/w', )
+app.use('/api/w',webRouter)
 
 const port = process.env.PORT || 3000;
 
