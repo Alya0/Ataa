@@ -1,3 +1,6 @@
+const bcrypt = require('bcryptjs');
+const { type } = require('express/lib/response');
+
 'use strict';
 const {
   Model
@@ -15,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "cascade"
       })
     }
+    static async hashPassword(value){
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(value, salt)
+      console.log(hashedPassword)
+      return hashedPassword
+    }
   }
   User.init({
     full_name:{
@@ -30,8 +39,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     password:{
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.TEXT,
+      set(value){
+        User.hashPassword(value)
+        .then((hashedPassword)=>{
+          console.log('here '+ hashedPassword)
+          this.setDataValue('password', hashedPassword)
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      },
+      // allowNull:false
     }
   }, {
     sequelize,
