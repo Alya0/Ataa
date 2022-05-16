@@ -47,7 +47,12 @@ const edit = async(req, res)=>{
 
 const del = async(req, res)=>{
 	const {id} = req.params
-	res.json({msg: `delete ${id}`})
+	const beneficiary = await Beneficiary.findByPk(id)
+	if(!beneficiary){
+		throw new NotFoundError(`No beneficiary with id ${id}`)
+	}
+	await beneficiary.destroy()
+	res.status(StatusCodes.OK).send()
 }
 
 
