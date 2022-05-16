@@ -122,6 +122,15 @@ module.exports = (sequelize, DataTypes) => {
         'اجار'
       ],
       allowNull: false
+    },
+    application_status:{
+      type: DataTypes.ENUM,
+      values:[
+        'pending',
+        'accepted',
+        'rejected'
+      ],
+      defaultValue: 'pending'
     }
   }, {
     sequelize,
