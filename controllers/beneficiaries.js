@@ -39,8 +39,7 @@ const edit = async(req, res)=>{
 	if(!beneficiary){
 		throw new NotFoundError(`No beneficiary with id ${id}`)
 	}
-	beneficiary.set(req.body)
-	await beneficiary.save()
+	await beneficiary.update(req.body)
 	res.status(StatusCodes.OK).json(beneficiary)
 }
 
