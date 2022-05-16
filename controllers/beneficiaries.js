@@ -7,8 +7,7 @@ const getAll = async(req, res)=>{
 }
 
 const create = async(req, res)=>{
-	console.log(req.body)
-	const beneficiary = Beneficiary.create({...req.body})
+	const beneficiary = await Beneficiary.create({...req.body})
 	res.status(StatusCodes.CREATED).json({beneficiary})
 }
 
