@@ -23,15 +23,18 @@ module.exports = (sequelize, DataTypes) => {
   Beneficiary.init({
     full_name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      notEmpty: true
     },
     ID_number:{
       type: DataTypes.STRING, 
-      allowNull: false
+      allowNull: false,
+      notEmpty: true
     },
     phone_number:{
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      notEmpty: true
     },
     birth_date:{
       type: DataTypes.DATEONLY,
@@ -73,12 +76,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     job:{
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      notEmpty: true
     },
     salary:{
       type: DataTypes.INTEGER,
       defaultValue: 0,
-      allowNull: false
+      allowNull: false,
+      notEmpty: true
     },
     province:{
       type: DataTypes.ENUM,
@@ -98,15 +103,18 @@ module.exports = (sequelize, DataTypes) => {
       'ريف دمشق',
       'طرطوس'
       ],
-      allowNull: false
+      allowNull: false,
+      notEmpty: true
     },
     area:{
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      notEmpty: true
     },
     address:{
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
+      notEmpty: true
     },
     description:{
       type: DataTypes.TEXT
@@ -121,7 +129,8 @@ module.exports = (sequelize, DataTypes) => {
         'ملك',
         'اجار'
       ],
-      allowNull: false
+      allowNull: false,
+      notEmpty: true
     },
     application_status:{
       type: DataTypes.ENUM,

@@ -35,7 +35,13 @@ const getOne = async(req, res)=>{
 
 const edit = async(req, res)=>{
 	const {id} = req.params
-	res.json({msg: `edit ${id}`})
+	const beneficiary = await Beneficiary.findByPk(id)
+	if(!beneficiary){
+		throw new NotFoundError(`No beneficiary with id ${id}`)
+	}
+	beneficiary.set(req.body)
+	await beneficiary.save()
+	res.status(StatusCodes.OK).json(beneficiary)
 }
 
 
