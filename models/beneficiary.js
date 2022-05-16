@@ -24,21 +24,30 @@ module.exports = (sequelize, DataTypes) => {
     full_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      notEmpty: true
+      validate: {
+        notEmpty: true, 
+        isAlpha : true
+      }
     },
     ID_number:{
       type: DataTypes.STRING, 
       allowNull: false,
-      notEmpty: true
+      validate: {
+        notEmpty: true, 
+        isNumeric : true
+      }
     },
     phone_number:{
       type: DataTypes.STRING,
       allowNull: false,
-      notEmpty: true
+      validate: {
+        notEmpty: true, 
+        isNumeric : true
+      }
     },
     birth_date:{
       type: DataTypes.DATEONLY,
-      // allowNull: false
+      allowNull: false,
       set(value){
         const jsDate = new Date(value)
         this.setDataValue('birth_date', jsDate)
@@ -68,7 +77,10 @@ module.exports = (sequelize, DataTypes) => {
         'married',
         'divorced'
       ],
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty : true
+      }
     },
     children_number:{
       type: DataTypes.INTEGER,
@@ -77,13 +89,17 @@ module.exports = (sequelize, DataTypes) => {
     job:{
       type: DataTypes.STRING,
       allowNull: false,
-      notEmpty: true
+      validate: {
+        notEmpty: true
+      }
     },
     salary:{
       type: DataTypes.INTEGER,
       defaultValue: 0,
-      allowNull: false,
-      notEmpty: true
+      allowNull:false,
+      validate: {
+        isNumeric : true
+      }
     },
     province:{
       type: DataTypes.ENUM,
@@ -104,17 +120,25 @@ module.exports = (sequelize, DataTypes) => {
       'طرطوس'
       ],
       allowNull: false,
-      notEmpty: true
+      validate:{
+        notEmpty : true
+      }
     },
     area:{
       type: DataTypes.STRING,
       allowNull: false,
-      notEmpty: true
+      validate: {
+        notEmpty: true, 
+        isNumeric : true
+      }
     },
     address:{
       type: DataTypes.TEXT,
       allowNull: false,
-      notEmpty: true
+      validate: {
+        notEmpty: true, 
+        isNumeric : true
+      }
     },
     description:{
       type: DataTypes.TEXT
@@ -130,7 +154,9 @@ module.exports = (sequelize, DataTypes) => {
         'اجار'
       ],
       allowNull: false,
-      notEmpty: true
+      validate:{
+        notEmpty : true
+      }
     },
     application_status:{
       type: DataTypes.ENUM,
