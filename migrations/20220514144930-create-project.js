@@ -40,23 +40,30 @@ module.exports = {
         allowNull: false
       },
       project_type:{
+        allowNull: false,
         type: Sequelize.ENUM,
         values: [
+          'public',
+          'private',
           'خاص',
           'عام'
         ],
-        allowNull: false
       },
       target_money:{
-        type: Sequelize.BIGINT
+        type: Sequelize.BIGINT,
+        allowNull:false,
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+      project_status:{
+        defaultValue: 'ongoing',
+        type: Sequelize.ENUM,
+        values:[
+          'pending',
+          'ongoing',
+          'finished',
+          'معلق',
+          'مستمر',
+          'منتهي'
+        ],
       }
     });
   },

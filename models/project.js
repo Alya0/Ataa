@@ -31,16 +31,34 @@ module.exports = (sequelize, DataTypes) => {
   Project.init({
     name: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate: {
+        notNull: true,
+        notEmpty: true,
+        isAlpha: true,
+      }
     },
     start_date: {
+      allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
+      defaultValue: DataTypes.NOW,
+      validate: {
+        isDate: true,
+        notNull: true,
+        notEmpty: true,
+      }
     },
     end_date:{
-      type: DataTypes.DATE
+      allowNull: false,
+      type: DataTypes.DATE,
+      validate: {
+        isDate: true,
+        notNull: true,
+        notEmpty: true,
+      }
     },
     province:{
+      allowNull: false,
       type: DataTypes.ENUM,
       values: [
       'حلب',
@@ -58,18 +76,80 @@ module.exports = (sequelize, DataTypes) => {
       'ريف دمشق',
       'طرطوس'
       ],
-      allowNull: false
+      validate: {
+        notEmpty: true,
+        notNull: true,
+        isIn: [
+          [
+            'حلب',
+            'رقة',
+            'سويداء',
+            'دمشق',
+            'درعا',
+            'دير الزور',
+            'حماة',
+            'حسكة',
+            'حمص',
+            'ادلب',
+            'لاذقية',
+            'قنيطرة',
+            'ريف دمشق',
+            'طرطوس'
+          ]
+        ],
+      },
     },
     project_type:{
+      allowNull: false,
       type: DataTypes.ENUM,
       values: [
+        'public',
+        'private',
         'خاص',
         'عام'
       ],
-      allowNull: false
+      validate: {
+        notEmpty: true,
+        notNull: true,
+        isIn: [
+          [
+            'خاص',
+            'عام'
+          ]
+        ],
+      },
     },
     target_money:{
-      type: DataTypes.BIGINT
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      notEmpty: true,
+      validate:{
+        notNull: true,
+        notEmpty: true,
+        isNumeric: true,
+      }
+    },
+    project_status:{
+      defaultValue: 'ongoing',
+      type: DataTypes.ENUM,
+      values:[
+        'pending',
+        'ongoing',
+        'finished',
+        'معلق',
+        'مستمر',
+        'منتهي',
+      ],
+      validate:{
+        isIn:[[
+          'pending',
+          'ongoing',
+          'finished',
+          'معلق',
+          'مستمر',
+          'منتهي',
+        ]]
+      }
     }
   }, {
     sequelize,

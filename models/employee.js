@@ -165,11 +165,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: {
       type: DataTypes.ENUM,
-      values: ['متطوع', 'موظف'],
+      values: ['volunteer','employee','متطوع', 'موظف'],
       notEmpty: true,
       allowNull:false,
       validate: {
-        isIn: [['متطوع', 'موظف']],
+        isIn: [['volunteer','employee','متطوع', 'موظف']],
         notEmpty: true,
         notNull: true,
       },
