@@ -6,41 +6,39 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
       },
       full_name: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         notEmpty: true,
         isAlpha: true,
-        len: [3, 25]
       },
       ID_number: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         notEmpty: true,
-        len: [5, 20]
       },
       email: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         unique: true,
         isEmail: true,
         notEmpty: true,
       },
       phone_number: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         notEmpty: true,
       },
       birth_date: {
-        type: DataTypes.DATE,
+        type: Sequelize.DATE,
         notEmpty: true,
         isDate: true,
       },
       gender: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         isIn: [['ذكر', 'أنثى']],
         notEmpty: true,
       },
       province: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         isIn: [[
           'حلب',
           'رقة',
@@ -59,36 +57,25 @@ module.exports = {
         notEmpty: true,
       },
       area: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         notEmpty: true,
-        len: [5, 30],
       },
       address: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         notEmpty: true,
-        len: [5, 30],
       },
       description: {
-        type: DataTypes.TEXT,
+        type: Sequelize.TEXT,
         notEmpty: true,
-        len: [5, 30],
       },
       type: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         isIn: [['ممول', 'عام']],
         notEmpty: true,
       },
       picture: {
 
       },
-      createdAt: {
-        allowNull: false,
-        type: DataTypes.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: DataTypes.DATE
-      }
     });
   },
   async down(queryInterface, Sequelize) {

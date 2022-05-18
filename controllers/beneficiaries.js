@@ -1,5 +1,5 @@
 const {Beneficiary} = require('../models')
-const StatusCodes = require('http-status-codes')
+const {StatusCodes} = require('http-status-codes')
 const { NotFoundError } = require('../errors')
 
 const getAll = async(req, res)=>{
@@ -63,4 +63,4 @@ const all = {
 	del
 }
 
-module.exports = all
+module.exports = {all}

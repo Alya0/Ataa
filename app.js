@@ -16,7 +16,6 @@ app.use(express.json());
 
 app.use('/api/w',webRouter)
 
-
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
@@ -25,7 +24,7 @@ const port = process.env.PORT || 3000;
 const start = async () => {
 	try {
 			await sequelize.authenticate();
-			// await sequelize.sync({force: true})
+			await sequelize.sync({force: true})
 			app.listen(port, console.log(`Server is listening on port ${port}...`)
 			);
 	} catch (error) {
