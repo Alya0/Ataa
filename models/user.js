@@ -37,8 +37,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull : false
-      //TODO is unique and is email
+      allowNull : false,
+      unique: true,
+      validate: {
+        notEmpty: true, 
+        isEmail: true, 
+      }
     },
     phone_number:{
       type: DataTypes.STRING,

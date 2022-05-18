@@ -28,18 +28,31 @@ const login = async(req, res)=>{
 }
 
 const register = async(req, res)=>{
+	//hash password
 	const credentials = req.body
 	const salt = await bcrypt.genSalt(10)
  const hashedPassword = await bcrypt.hash(credentials.password, salt)
 	credentials.password = hashedPassword
-
+	// create user
+	console.log('before')
 	const user = await User.create(credentials)
-	//TODO send email with secret code for verification, add isActive attribute and set to false
+	console.log('after')
+	//generate code and save it to data base
+
+	//send code
+	
 	res.status(StatusCodes.CREATED).json(user)
 }
 
 const verifyRegister = async(req, res)=>{
-	//TODO check secret code then mark account as active and generate token 
+
+	//check code
+
+	//mark active
+
+	//generate token
+
+
 	res.send('verifyMyREgister')
 }
 
