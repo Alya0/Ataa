@@ -1,5 +1,6 @@
-const bcrypt = require('bcryptjs');
-const { type } = require('express/lib/response');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+require('dotenv').config();
 
 'use strict';
 const {
@@ -18,11 +19,15 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "cascade"
       })
     }
-    static async hashPassword(value){
-      const salt = await bcrypt.genSalt(10)
-      const hashedPassword = await bcrypt.hash(value, salt)
-      console.log(hashedPassword)
-      return hashedPassword
+    async comparePassword(canditatePassword){
+      const isMatch = await bcrypt.compare(canditatePassword, this.password)
+      return isMatch
+    }
+    createJWT(){
+      return jwt.sign(
+        {userID: this.id, name: this.full_name},
+        process.env.JWT_SECRET,
+        {expiresIn: process.env.JWT_LIFETIME})
     }
   }
   User.init({
@@ -33,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull : false
+      //TODO is unique and is email
     },
     phone_number:{
       type: DataTypes.STRING,
@@ -40,17 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     password:{
       type: DataTypes.TEXT,
-      set(value){
-        User.hashPassword(value)
-        .then((hashedPassword)=>{
-          console.log('here '+ hashedPassword)
-          this.setDataValue('password', hashedPassword)
-        })
-        .catch((err)=>{
-          console.log(err)
-        })
-      },
-      // allowNull:false
+      allowNull:false
     }
   }, {
     sequelize,
