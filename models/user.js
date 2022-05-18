@@ -29,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
         process.env.JWT_SECRET,
         {expiresIn: process.env.JWT_LIFETIME})
     }
+    compareSecretCode(candidateCode){
+      const isMatch = (candidateCode === this.secret_code)
+      return isMatch
+    }
   }
   User.init({
     full_name:{
@@ -51,6 +55,14 @@ module.exports = (sequelize, DataTypes) => {
     password:{
       type: DataTypes.TEXT,
       allowNull:false
+    },
+    secret_code:{
+      type: DataTypes.INTEGER,
+      defaultValue: Math.floor(Math.random() * 10000)
+    },
+    is_active:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     sequelize,

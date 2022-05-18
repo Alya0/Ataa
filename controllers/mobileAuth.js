@@ -33,11 +33,9 @@ const register = async(req, res)=>{
 	const salt = await bcrypt.genSalt(10)
  const hashedPassword = await bcrypt.hash(credentials.password, salt)
 	credentials.password = hashedPassword
-	// create user
-	console.log('before')
+
+	// create user (creation of secret code happens by default)
 	const user = await User.create(credentials)
-	console.log('after')
-	//generate code and save it to data base
 
 	//send code
 	
@@ -45,15 +43,27 @@ const register = async(req, res)=>{
 }
 
 const verifyRegister = async(req, res)=>{
+	const {email , code} = req.body
+	
+	if( !email || !code ){
+		throw new BadRequestError('Please provide email & code')
+	}
+//get user 
+	const user = await User.findOne({where: {email}})
+	if(!user){
+		throw new UnauthenticatedError('Invalid Credentials')
+	}
+	//check correctness of token
+	const isCodeCorrect = user.compareSecretCode(parseInt(code))
+	if(!isCodeCorrect){
+		throw new UnauthenticatedError('Invalid Code')
+	}
+	//mark active may delete later !
+	await user.update({ is_active: true })
+	//generate tokens
+	const token = user.createJWT()
 
-	//check code
-
-	//mark active
-
-	//generate token
-
-
-	res.send('verifyMyREgister')
+	res.status(StatusCodes.OK).json({ user: { name: user.full_name }, token })
 }
 
 const all = {
