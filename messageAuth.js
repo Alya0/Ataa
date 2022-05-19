@@ -7,21 +7,19 @@ let transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: 'ataa2022@outlook.com', // generated ethereal user
-    pass: '123456789ataa', // generated ethereal password
+    user: 'ataa2022@outlook.com', 
+    pass: '123456789ataa',
   },
 });
 
 async function sendCode(code, email) {
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Ataa" <ataa2022@outlook.com>', // sender address
-    to: email, // list of receivers
-    subject: "Email verification for Ataa", // Subject line
-    text: `your code is ${code}`, // plain text body
+    from: '"Ataa" <ataa2022@outlook.com>',
+    to: email, 
+    subject: "Email verification for Ataa", 
+    text: `your code is ${code}`,
   });
 	}
-
-	// main().catch(console.error);
 
   module.exports = sendCode
