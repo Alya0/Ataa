@@ -8,6 +8,9 @@ const errorHandlerMiddleware = (err, req, res, next) => {
   if(err.name === 'SequelizeValidationError'){
     return res.status(StatusCodes.BAD_REQUEST).json({msg:err.errors})
   }
+  if(err.name === 'SequelizeUniqueConstraintError'){
+    return res.status(StatusCodes.BAD_REQUEST).json({msg:err.errors})
+  }
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Something went wrong try again later')
 }
 

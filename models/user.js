@@ -1,3 +1,7 @@
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+require('dotenv').config();
+
 'use strict';
 const {
   Model
@@ -15,6 +19,20 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "cascade"
       })
     }
+    async comparePassword(canditatePassword){
+      const isMatch = await bcrypt.compare(canditatePassword, this.password)
+      return isMatch
+    }
+    createJWT(){
+      return jwt.sign(
+        {userID: this.id, name: this.full_name},
+        process.env.JWT_SECRET,
+        {expiresIn: process.env.JWT_LIFETIME})
+    }
+    compareSecretCode(candidateCode){
+      const isMatch = (candidateCode === this.secret_code)
+      return isMatch
+    }
   }
   User.init({
     full_name:{
@@ -23,15 +41,28 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      unique: true,
+      validate: {
+        notEmpty: true, 
+        isEmail: true, 
+      }
     },
-    phone:{
+    phone_number:{
       type: DataTypes.STRING,
       allowNull: false
     },
     password:{
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull:false
+    },
+    secret_code:{
+      type: DataTypes.INTEGER,
+      defaultValue: Math.floor(Math.random() * 10000)
+    },
+    is_active:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     sequelize,
