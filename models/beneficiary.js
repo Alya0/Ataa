@@ -128,16 +128,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true, 
-        isNumeric : true
+        notEmpty: true
       }
     },
     address:{
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        notEmpty: true, 
-        isNumeric : true
+        notEmpty: true
       }
     },
     description:{
