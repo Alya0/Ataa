@@ -2,9 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 //get controllers
-const {all} = require('../controllers/beneficiaries')
+const {all} = require('../controllers/beneficiaries');
 const {employeeController} = require('../controllers/employee');
 const {projectController} = require('../controllers/project');
+const {webAuth} = require('../controllers/webAuth');
+
+//login
+router.post('/login', webAuth.login);
 
 //beneficiaries
 router.get('/beneficiaries/:status', all.getAll);

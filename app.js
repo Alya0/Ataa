@@ -4,10 +4,12 @@ require('express-async-errors');  // we use this package so we dont write our mi
 const express = require('express');
 const app = express();
 
-const {sequelize} = require('./models')
+const {sequelize} = require('./models');
+const queryInterface = sequelize.getQueryInterface();
+const Role = require('./seeders/20220627101056-demo-role');
 
-const webRouter = require('./routes/WebRouter')
-const mobileRouter = require('./routes/MobileRouter')
+const webRouter = require('./routes/WebRouter');
+const mobileRouter = require('./routes/MobileRouter');
 
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
@@ -16,8 +18,8 @@ app.use(express.json());
 
 //middleware
 
-app.use('/api/w',webRouter)
-app.use('/api/m',mobileRouter)
+app.use('/api/w',webRouter);
+app.use('/api/m',mobileRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
@@ -27,8 +29,10 @@ const port = process.env.PORT || 3000;
 const start = async () => {
 	try {
 			await sequelize.authenticate();
-			await sequelize.sync({force: true})
-			app.listen(port, console.log(`Server is listening on port ${port}...`)
+			// await sequelize.sync({force: true});
+			// await Role.up(queryInterface, sequelize);
+			app.listen(port,
+				console.log(`Server is listening on port ${port}...`)
 			);
 	} catch (error) {
 			console.log(error);

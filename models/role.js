@@ -1,3 +1,7 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 'use strict';
 const {
   Model
@@ -16,12 +20,26 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "cascade"
       })
     }
+    async comparePassword(canditatePassword){
+      const isMatch = await bcrypt.compare(canditatePassword, this.password)
+      return isMatch
+    }
+    createJWT(){
+      return jwt.sign(
+          {userID: this.id, user_name: this.user_name},
+          process.env.JWT_SECRET,
+          {expiresIn: process.env.JWT_LIFETIME})
+    }
   }
   Role.init({
-    name: {
+    user_name: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    password:{
+      type: DataTypes.TEXT,
+      allowNull:false
+    },
   }, {
     sequelize,
     modelName: 'Role',
