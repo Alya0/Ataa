@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     }
     createJWT(){
       return jwt.sign(
-        {userID: this.id, name: this.full_name},
+        {id: this.id, username: this.full_name},
         process.env.JWT_SECRET,
         {expiresIn: process.env.JWT_LIFETIME})
     }
