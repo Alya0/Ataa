@@ -17,63 +17,55 @@ const create = async (req, res) => {
         const emp = await Employee.create({ ...req.body });
         return res.status(StatusCodes.CREATED).json(emp);
     } catch (e) {
-        return res.status(StatusCodes.BAD_REQUEST).json({"message": e.message});
+        throw new BadRequestError(e.message);
     }
 };
 
 const read = async (req, res) => {
-    try {
-        const emp = await Employee.findOne({
-            where: {
-                id: req.params.id,
-            }
-        });
-        if (!emp) {
-            throw new NotFoundError("Employee Not Found");
+    const emp = await Employee.findOne({
+        where: {
+            id: req.params.id,
         }
-        res.status(StatusCodes.OK).json(emp);
-    } catch (e) {
-        return res.status(StatusCodes.NOT_FOUND).json({"message": e.message});
+    });
+    if (!emp) {
+        throw new NotFoundError("Employee Not Found");
     }
+    res.status(StatusCodes.OK).json(emp);
 };
 
 const update = async (req, res) => {
-    try {
-        const emp = await Employee.findOne({
-            where:{
-                id: req.params.id
-            }
-        });
-        if(!emp){
-            throw new NotFoundError("Employee Not Found");
+    const emp = await Employee.findOne({
+        where:{
+            id: req.params.id
         }
-        await emp.set({...req.body});
-        emp.save();
+    });
+    if(!emp){
+        throw new NotFoundError("Employee Not Found");
+    }
+    try {
+        await emp.update({...req.body});
         return res.status(StatusCodes.OK).json(emp);
-    } catch (e) {
-        return res.status(StatusCodes.BAD_REQUEST).json({"message" : e.message});
+    }
+    catch (e) {
+        throw new BadRequestError(e.message);
     }
 };
 
 const destroy = async (req, res) => {
-    try {
-        const emp = await Employee.findOne({
-            where: {
-                id: req.params.id,
-            }
-        });
-        if(!emp){
-            throw new NotFoundError("Employee not Found");
+    const emp = await Employee.findOne({
+        where: {
+            id: req.params.id,
         }
-        await Employee.destroy({
-            where: {
-                id: req.params.id,
-            }
-        });
-        return res.status(StatusCodes.OK).json(emp);
-    } catch (e) {
-        return res.status(StatusCodes.NOT_FOUND).json({"message": e.message});
+    });
+    if(!emp){
+        throw new NotFoundError("Employee not Found");
     }
+    await Employee.destroy({
+        where: {
+            id: req.params.id,
+        }
+    });
+    return res.status(StatusCodes.OK).json(emp);
 };
 
 const employeeController = {

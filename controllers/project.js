@@ -4,75 +4,67 @@ const { BadRequestError } = require('../errors/bad-request');
 const { StatusCodes } = require('http-status-codes');
 
 const index = async (req, res) =>{
-
+    try {
+        const all = await Project.findAll();
+        return res.json(all);
+    } catch (e) {
+        return res.json(e);
+    }
 };
 
 const create = async (req, res) =>{
     try {
-      const project = await Project.create({...req.body});
-      if(!project){
-          throw new BadRequestError("Bad Request");
-      }
-      return res.status(StatusCodes.CREATED).json(project);
-    } catch(e){
-        return res.status(StatusCodes.BAD_REQUEST).json({"message": e});
+        const project = await Project.create({...req.body});
+        return res.status(StatusCodes.CREATED).json(project);}
+    catch (e) {
+        throw new BadRequestError(e.message);
     }
 };
 
 const read = async (req, res) =>{
-    try {
-        const project = await Project.findOne({
-            where:{
-                id: req.params.id
-            }
-        });
-        if(!project){
-            throw new NotFoundError("project not found");
+    const project = await Project.findOne({
+        where:{
+            id: req.params.id
         }
-        return res.status(StatusCodes.OK).json(project);
-    }catch(e){
-        return res.status(StatusCodes.NOT_FOUND).json({"message": e.message});
+    });
+    if(!project){
+        throw new NotFoundError("project not found");
     }
+    return res.status(StatusCodes.OK).json(project);
 };
 
 const update = async (req, res) =>{
-    try {
-        const project = await Project.findOne({
-            where:{
-                id: req.params.id
-            }
-        });
-        if(!project){
-            throw new NotFoundError("project not found");
+    const pro = await Project.findOne({
+        where:{
+            id: req.params.id
         }
-        await project.set({...req.body});
-        project.save();
-        return res.status(StatusCodes.OK).json(project);
-    } catch (e) {
-        return res.status(StatusCodes.NOT_FOUND).json({"messag": e});
+    });
+    if(!pro){
+        throw new NotFoundError("project not found");
     }
-
+    try {
+        await pro.update({...req.body});
+        return res.status(StatusCodes.OK).json(pro);}
+    catch (e) {
+        throw new BadRequestError(e.message);
+    }
 };
 
 const destroy = async (req, res) =>{
-    try{
-        const project = await Project.findOne({
-            where: {
-                id: req.params.id,
-            }
-        });
-        if(!project){
-            throw new NotFoundError("project not found");
+    const project = await Project.findOne({
+        where: {
+            id: req.params.id,
         }
-        await Project.destroy({
-            where: {
-                id: req.params.id,
-            }
-        });
-        return res.status(StatusCodes.OK).json(project);
-    } catch(e){
-        return res.status(StatusCodes.NOT_FOUND).json({"message": e.message})
+    });
+    if(!project){
+        throw new NotFoundError("project not found");
     }
+    await Project.destroy({
+        where: {
+            id: req.params.id,
+        }
+    });
+    return res.status(StatusCodes.OK).json(project);
 };
 
 const projectController = {
