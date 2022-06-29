@@ -164,7 +164,10 @@ module.exports = (sequelize, DataTypes) => {
         'rejected'
       ],
       defaultValue: 'pending'
-    }
+    },
+    image: {
+      type: DataTypes.STRING
+    },
   }, {
     sequelize,
     modelName: 'Beneficiary',

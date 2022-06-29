@@ -6,17 +6,16 @@ const {all} = require('../controllers/beneficiaries');
 const {employeeController} = require('../controllers/employee');
 const {projectController} = require('../controllers/project');
 const {webAuth} = require('../controllers/webAuth');
-const authenticationMiddleware = require('../middleware/auth')
-const { upload } = require('../controllers/imagesetter')
+const authenticationMiddleware = require('../middleware/auth');
+const { upload } = require('../controllers/imagesetter');
 
 //login
 router.post('/login', webAuth.login);
 
 //beneficiaries
-router.get('/beneficiaries/:status', all.getAll);
-router.post('/beneficiary/create',all.create);
-router.route('/beneficiary/create').post(upload ,all.create);
-router.route('/beneficiary/:id').get(all.getOne).post(upload ,all.edit).delete(all.del);
+router.get('/beneficiaries/:status', authenticationMiddleware, all.getAll);
+router.route('/beneficiary/create').post(authenticationMiddleware ,upload ,all.create);
+router.route('/beneficiary/:id').get(authenticationMiddleware, all.getOne).post(authenticationMiddleware, upload, all.edit).delete(authenticationMiddleware, all.del);
 
 //employee routes
 router.route('/employee/create').post(authenticationMiddleware ,upload ,employeeController.create);
