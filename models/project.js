@@ -150,7 +150,10 @@ module.exports = (sequelize, DataTypes) => {
           'منتهي',
         ]]
       }
-    }
+    },
+    image: {
+      type: DataTypes.STRING
+    },
   }, {
     sequelize,
     modelName: 'Project',

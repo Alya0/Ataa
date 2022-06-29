@@ -20,6 +20,7 @@ app.use(express.json());
 
 app.use('/api/w',webRouter);
 app.use('/api/m',mobileRouter);
+app.use('/Images', express.static('./Images'));
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
@@ -29,8 +30,8 @@ const port = process.env.PORT || 3000;
 const start = async () => {
 	try {
 			await sequelize.authenticate();
-			// await sequelize.sync({force: true});
-			// await Role.up(queryInterface, sequelize);
+			await sequelize.sync({force: true});
+			await Role.up(queryInterface, sequelize);
 			app.listen(port,
 				console.log(`Server is listening on port ${port}...`)
 			);

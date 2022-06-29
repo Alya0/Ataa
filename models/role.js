@@ -26,13 +26,13 @@ module.exports = (sequelize, DataTypes) => {
     }
     createJWT(){
       return jwt.sign(
-          {userID: this.id, user_name: this.user_name},
+          {userID: this.id, username: this.username},
           process.env.JWT_SECRET,
           {expiresIn: process.env.JWT_LIFETIME})
     }
   }
   Role.init({
-    user_name: {
+    username: {
       type: DataTypes.STRING,
       allowNull: false
     },

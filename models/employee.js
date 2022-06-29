@@ -163,6 +163,9 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty:true,
       }
     },
+    image: {
+      type: DataTypes.STRING
+    },
     type: {
       type: DataTypes.ENUM,
       values: ['volunteer','employee','متطوع', 'موظف'],

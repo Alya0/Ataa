@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     }
     createJWT(){
       return jwt.sign(
-        {userID: this.id, name: this.full_name},
+        {id: this.id, username: this.full_name},
         process.env.JWT_SECRET,
         {expiresIn: process.env.JWT_LIFETIME})
     }
@@ -37,7 +37,11 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     full_name:{
       type: DataTypes.STRING,
-      allowNull : false
+      allowNull : false,
+      validate:{
+        notEmpty : true, 
+        notNull : true
+      }
     },
     email: {
       type: DataTypes.STRING,
@@ -50,7 +54,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     phone_number:{
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notNull : true, 
+        notEmpty: true
+      }
     },
     password:{
       type: DataTypes.TEXT,

@@ -6,6 +6,8 @@ const {all} = require('../controllers/beneficiaries');
 const {employeeController} = require('../controllers/employee');
 const {projectController} = require('../controllers/project');
 const {webAuth} = require('../controllers/webAuth');
+const authenticationMiddleware = require('../middleware/auth')
+const { upload } = require('../controllers/imagesetter')
 
 //login
 router.post('/login', webAuth.login);
@@ -13,15 +15,16 @@ router.post('/login', webAuth.login);
 //beneficiaries
 router.get('/beneficiaries/:status', all.getAll);
 router.post('/beneficiary/create',all.create);
-router.route('/beneficiary/:id').get(all.getOne).post(all.edit).delete(all.del);
+router.route('/beneficiary/create').post(upload ,all.create);
+router.route('/beneficiary/:id').get(all.getOne).post(upload ,all.edit).delete(all.del);
 
 //employee routes
-router.route('/employee/create').post(employeeController.create);
-router.route('/employee/:id').get(employeeController.read).delete(employeeController.destroy).post(employeeController.update);
+router.route('/employee/create').post(authenticationMiddleware ,upload ,employeeController.create);
+router.route('/employee/:id').get(authenticationMiddleware ,employeeController.read).delete(authenticationMiddleware ,employeeController.destroy).post(authenticationMiddleware ,upload ,employeeController.update);
 
 //project routes
-router.route('/project/create').post(projectController.create);
-router.route('/project/:id').post(projectController.update).get(projectController.read).delete(projectController.destroy);
+router.route('/project/create').post(authenticationMiddleware ,upload ,projectController.create);
+router.route('/project/:id').post(authenticationMiddleware ,upload ,projectController.update).get(authenticationMiddleware ,projectController.read).delete(authenticationMiddleware ,projectController.destroy);
 
 module.exports = router;
 

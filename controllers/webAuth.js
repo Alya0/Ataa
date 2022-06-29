@@ -3,13 +3,13 @@ const { BadRequestError, UnauthenticatedError } = require('../errors');
 const { Role } = require('../models');
 
 const login = async(req, res)=>{
-    const {user_name, password} = req.body;
+    const {username, password} = req.body;
 
-    if( !user_name || !password ){
-        throw new BadRequestError('Please provide email & password');
+    if( !username || !password ){
+        throw new BadRequestError('Please provide User name & password');
     }
 
-    const role = await Role.findOne({where: {user_name}});
+    const role = await Role.findOne({where: {username}});
     if(!role){
         throw new UnauthenticatedError('Invalid Credentials')
     }
