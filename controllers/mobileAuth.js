@@ -32,7 +32,7 @@ const register = async(req, res)=>{
 	//hash password
 	const credentials = req.body
 	const salt = await bcrypt.genSalt(10)
- const hashedPassword = await bcrypt.hash(credentials.password, salt)
+ 	const hashedPassword = await bcrypt.hash(credentials.password, salt)
 	credentials.password = hashedPassword
 
 	// create user (creation of secret code happens by default)

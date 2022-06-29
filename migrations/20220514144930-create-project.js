@@ -64,7 +64,10 @@ module.exports = {
           'مستمر',
           'منتهي'
         ],
-      }
+      },
+      image: {
+        type: Sequelize.STRING
+      },
     });
   },
   async down(queryInterface, Sequelize) {

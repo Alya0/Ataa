@@ -6,7 +6,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INT,
       },
       full_name: {
         type: Sequelize.STRING,
@@ -65,16 +65,16 @@ module.exports = {
         notEmpty: true,
       },
       description: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         notEmpty: true,
+      },
+      image: {
+        type: Sequelize.STRING
       },
       type: {
         type: Sequelize.STRING,
         isIn: [['ممول', 'عام']],
         notEmpty: true,
-      },
-      picture: {
-
       },
     });
   },
