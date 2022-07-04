@@ -30,7 +30,7 @@ const port = process.env.PORT || 3000;
 const start = async () => {
 	try {
 			await sequelize.authenticate();
-			await sequelize.sync({force: true});
+			// await sequelize.sync({force: true});
 			await Role.up(queryInterface, sequelize);
 			app.listen(port,
 				console.log(`Server is listening on port ${port}...`)

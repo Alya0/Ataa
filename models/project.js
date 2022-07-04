@@ -113,6 +113,8 @@ module.exports = (sequelize, DataTypes) => {
         notNull: true,
         isIn: [
           [
+            'public',
+            'private',
             'خاص',
             'عام'
           ]
