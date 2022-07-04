@@ -10,6 +10,7 @@ const userController = require('../controllers/user')
 router.post('/login', mobileAuthController.login)
 router.post('/register', mobileAuthController.register)
 router.post('/register/verify', mobileAuthController.verifyRegister)
+router.post('/register/code', mobileAuthController.resendCode)
 
 //user routes
 router.use('/profile', authenticateUser)

@@ -39,8 +39,19 @@ const register = async(req, res)=>{
 	const user = await User.create(credentials)
 
 	//send code
-	await sendAuthCode(user.secret_code, user.email)
+	// await sendAuthCode(user.secret_code, user.email)
 	res.status(StatusCodes.CREATED).json(user)
+}
+
+const resendCode = async(req, res)=>{
+	const {email} = req.body
+	const user = await User.findOne({where : {email}})
+	if(!user){
+		throw new UnauthenticatedError('Invalid Credentials')
+	}
+	user.secret_code = Math.floor(Math.random() * 10000)
+	// await sendAuthCode(user.secret_code, user.email)
+	res.status(StatusCodes.OK).json(user)
 }
 
 const verifyRegister = async(req, res)=>{
@@ -70,7 +81,8 @@ const verifyRegister = async(req, res)=>{
 const all = {
 	login,
 	register,
-	verifyRegister
+	verifyRegister,
+	resendCode
 }
 
 module.exports = all
