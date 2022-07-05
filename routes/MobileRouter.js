@@ -17,5 +17,9 @@ router.use('/profile', authenticateUser)
 router.get('/profile', userController.get)
 router.post('/profile',userController.edit)
 
+//donation routes
+router.use('/donate', authenticateUser)
+router.post('/donate', userController.donate)
+
 module.exports = router
 
