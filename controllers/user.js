@@ -45,7 +45,7 @@ const donate = async(req, res)=>{
 			id
 		}
 	} = req
-	//donation verification
+	//TODO donation verification
 	const date = new Date().toISOString().slice(0, 10)
 	const donation = {value, ProjectId, UserId : id, date}
 	await Donation.create(donation)
