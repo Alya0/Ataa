@@ -1,7 +1,7 @@
 const e = require("express")
 const { StatusCodes } = require("http-status-codes")
 const { BadRequestError, UnauthenticatedError } = require('../errors')
-const {User, Donation, Project} = require("../models")
+const {User, Donation} = require("../models")
 
 
 const get = async(req, res)=>{
