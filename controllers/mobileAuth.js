@@ -39,7 +39,7 @@ const register = async(req, res)=>{
 	const user = await User.create(credentials)
 
 	//send code
-	// await sendAuthCode(user.secret_code, user.email)
+	await sendAuthCode(user.secret_code, user.email)
 	res.status(StatusCodes.CREATED).json(user)
 }
 
@@ -49,8 +49,9 @@ const resendCode = async(req, res)=>{
 	if(!user){
 		throw new UnauthenticatedError('Invalid Credentials')
 	}
-	user.secret_code = Math.floor(Math.random() * 10000)
-	// await sendAuthCode(user.secret_code, user.email)
+	const secret_code = Math.floor(Math.random() * 10000) 
+	await user.update({ secret_code  })
+	await sendAuthCode(secret_code, user.email)
 	res.status(StatusCodes.OK).json(user)
 }
 
