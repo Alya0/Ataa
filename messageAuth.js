@@ -20,6 +20,6 @@ async function sendCode(code, email) {
     subject: "Email verification for Ataa", 
     text: `your code is ${code}`,
   });
-	}
+}
 
   module.exports = sendCode

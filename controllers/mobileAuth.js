@@ -32,7 +32,7 @@ const register = async(req, res)=>{
 	//hash password
 	const credentials = req.body
 	const salt = await bcrypt.genSalt(10)
- 	const hashedPassword = await bcrypt.hash(credentials.password, salt)
+ const hashedPassword = await bcrypt.hash(credentials.password, salt)
 	credentials.password = hashedPassword
 
 	// create user (creation of secret code happens by default)
@@ -41,6 +41,18 @@ const register = async(req, res)=>{
 	//send code
 	await sendAuthCode(user.secret_code, user.email)
 	res.status(StatusCodes.CREATED).json(user)
+}
+
+const resendCode = async(req, res)=>{
+	const {email} = req.body
+	const user = await User.findOne({where : {email}})
+	if(!user){
+		throw new UnauthenticatedError('Invalid Credentials')
+	}
+	const secret_code = Math.floor(Math.random() * 10000) 
+	await user.update({ secret_code  })
+	await sendAuthCode(secret_code, user.email)
+	res.status(StatusCodes.OK).json(user)
 }
 
 const verifyRegister = async(req, res)=>{
@@ -70,7 +82,8 @@ const verifyRegister = async(req, res)=>{
 const all = {
 	login,
 	register,
-	verifyRegister
+	verifyRegister,
+	resendCode
 }
 
 module.exports = all
