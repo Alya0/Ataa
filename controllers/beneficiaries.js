@@ -55,12 +55,10 @@ const del = async(req, res)=>{
 }
 
 
-const all = {
+module.exports = {
 	getAll, 
 	getOne, 
 	create, 
 	edit,
 	del
 }
-
-module.exports = {all}

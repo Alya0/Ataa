@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //get controllers
-const {beneficiaryController} = require('../controllers/beneficiaries');
+const beneficiaryController = require('../controllers/beneficiaries');
 const {employeeController} = require('../controllers/employee');
 const {projectController} = require('../controllers/project');
 const {webAuth} = require('../controllers/webAuth');
