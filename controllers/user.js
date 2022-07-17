@@ -1,7 +1,7 @@
 const e = require("express")
 const { StatusCodes } = require("http-status-codes")
 const { BadRequestError, UnauthenticatedError } = require('../errors')
-const {User, Donation} = require("../models")
+const {User, Donation, Project, sequelize} = require("../models")
 
 
 const get = async(req, res)=>{
@@ -20,6 +20,22 @@ const get = async(req, res)=>{
 	const user_donations = await Donation.sum('value', {where: {UserId : id}});
 	user.dataValues.donations = (user_donations === null ? 0 : user_donations)
 	res.status(StatusCodes.OK).json(user)
+}
+
+const getDonations = async (req, res) =>{
+	const {
+		user : {
+			id
+		}
+	} = req
+
+	const [results, metadata] = await sequelize.query(`
+	SELECT donations.ProjectId, donations.date, donations.value FROM users 
+	INNER JOIN donations on users.id = donations.UserId 
+	INNER JOIN projects ON donations.ProjectId = projects.id
+	WHERE users.id = ${id}`)
+	const user_donations = results
+	res.status(StatusCodes.OK).json({hits:user_donations.length, user_donations})
 }
 
 const edit = async(req, res)=>{
@@ -55,7 +71,8 @@ const donate = async(req, res)=>{
 const all = {
 	get,
 	edit,
-	donate
+	donate,
+	getDonations
 }
 
 module.exports = all
