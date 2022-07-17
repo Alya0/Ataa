@@ -16,6 +16,11 @@ router.post('/register/code', mobileAuthController.resendCode)
 router.use('/profile', authenticateUser)
 router.get('/profile', userController.get)
 router.post('/profile',userController.edit)
+router.get('/profile/donations',userController.getDonations)
+
+//donation routes
+router.use('/donate', authenticateUser)
+router.post('/donate', userController.donate)
 
 module.exports = router
 

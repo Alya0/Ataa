@@ -1,7 +1,7 @@
 const e = require("express")
 const { StatusCodes } = require("http-status-codes")
 const { BadRequestError, UnauthenticatedError } = require('../errors')
-const {User, Donation} = require("../models")
+const {User, Donation, Project, sequelize} = require("../models")
 
 
 const get = async(req, res)=>{
@@ -22,6 +22,22 @@ const get = async(req, res)=>{
 	res.status(StatusCodes.OK).json(user)
 }
 
+const getDonations = async (req, res) =>{
+	const {
+		user : {
+			id
+		}
+	} = req
+
+	const [results, metadata] = await sequelize.query(`
+	SELECT donations.ProjectId, donations.date, donations.value FROM users 
+	INNER JOIN donations on users.id = donations.UserId 
+	INNER JOIN projects ON donations.ProjectId = projects.id
+	WHERE users.id = ${id}`)
+	const user_donations = results
+	res.status(StatusCodes.OK).json({hits:user_donations.length, user_donations})
+}
+
 const edit = async(req, res)=>{
 	//destructring an object
 	const {
@@ -35,10 +51,28 @@ const edit = async(req, res)=>{
 	res.status(StatusCodes.OK).json(user)
 }
 
+const donate = async(req, res)=>{
+	const {
+		body:{
+			value,
+			ProjectId
+		},
+		user : {
+			id
+		}
+	} = req
+	//TODO donation verification
+	const date = new Date().toISOString().slice(0, 10)
+	const donation = {value, ProjectId, UserId : id, date}
+	await Donation.create(donation)
+	res.status(StatusCodes.OK).json(donation)
+}
 
 const all = {
 	get,
-	edit
+	edit,
+	donate,
+	getDonations
 }
 
 module.exports = all
