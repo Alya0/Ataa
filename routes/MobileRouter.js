@@ -25,7 +25,7 @@ router.post('/donate', userController.donate)
 
 //project route
 router.get('/projects', projectsController.getAll)
-router.get('/project/:id', projectsController.getOne)
+router.get('/projects/:tag', projectsController.getByTag)
 
 //token check
 router.get('/tokencheck', authenticateUser, (req, res)=>{
