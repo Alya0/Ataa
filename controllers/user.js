@@ -12,11 +12,6 @@ const get = async(req, res)=>{
 	} = req
 
 	const user = await User.findByPk(id)
-	//test donation sum 
-	/*await Project.create({name:"bla", start_date:"09-09-2000", end_date:"08-08-2001", province: "حلب", project_type:"private", target_money:1000, project_status:"pending"})
-	await Donation.create({value:10, date:"09-09-2001", UserId: id, ProjectId: 1})
-	await Donation.create({value:20, date:"09-09-2001", UserId: id, ProjectId: 1})
-	await Donation.create({value:30, date:"09-09-2001", UserId: id, ProjectId: 1})*/
 	const user_donations = await Donation.sum('value', {where: {UserId : id}});
 	user.dataValues.donations = (user_donations === null ? 0 : user_donations)
 	res.status(StatusCodes.OK).json(user)
@@ -38,10 +33,14 @@ const getDonations = async (req, res) =>{
 	INNER JOIN donations on users.id = donations.UserId 
 	INNER JOIN projects ON donations.ProjectId = projects.id
 	WHERE users.id = ${id}`)
+	
 	let user_donations = results
 	user_donations.forEach((element) => {
 		if(element.categories) {
 			element.categories = element.categories.split(',')
+		}
+		else{
+			element.categories = []
 		}
 	})
 	res.status(StatusCodes.OK).json({hits:user_donations.length, user_donations})
