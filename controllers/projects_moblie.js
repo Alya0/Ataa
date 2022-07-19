@@ -32,8 +32,25 @@ const getByTag = async(req, res)=>{
 	if(!category){
 		throw new NotFoundError(`No category with name ${tag}`)
 	}
-	
-	res.status(StatusCodes.OK).json(category)
+	const [results, metadata] = await sequelize.query(`
+		SELECT * ,
+		(SELECT GROUP_CONCAT(categories.tag) FROM pro_cats 
+			INNER JOIN categories ON pro_cats.CategoryId = categories.id
+			WHERE pro_cats.ProjectId = projects.id) AS categories
+		FROM projects
+		INNER JOIN pro_cats ON projects.id = pro_cats.ProjectId
+		WHERE pro_cats.CategoryId = ${category.id}
+	`)
+	let projects = results
+	projects.forEach((element)=>{
+		if(element.categories){
+			element.categories = element.categories.split(',')
+		}
+		else{
+			element.categories = []
+		}
+	})
+	res.status(StatusCodes.OK).json(projects)
 }
 module.exports = {
 	getAll, 
