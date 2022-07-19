@@ -21,5 +21,13 @@ async function sendCode(code, email) {
     text: `your code is ${code}`,
   });
 }
+async function sendEmail(name, email){
+  let info = await transporter.sendMail({
+    from: '"Ataa" <ataa2022@outlook.com>',
+    to: email, 
+    subject: "Ataa confirmation", 
+    text: `Hello ${name}, you have been accepted to benifit from our charity, kindly visit us`,
+  });
+}
 
-  module.exports = sendCode
+  module.exports = {sendCode, sendEmail}

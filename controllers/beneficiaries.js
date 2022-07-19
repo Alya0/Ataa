@@ -1,6 +1,7 @@
 const {Beneficiary} = require('../models')
 const {StatusCodes} = require('http-status-codes')
 const { NotFoundError } = require('../errors')
+const {sendEmail} = require('../emailMessaging')
 
 const getAll = async(req, res)=>{
 	const {status} = req.params
@@ -38,6 +39,9 @@ const edit = async(req, res)=>{
 	const beneficiary = await Beneficiary.findByPk(id)
 	if(!beneficiary){
 		throw new NotFoundError(`No beneficiary with id ${id}`)
+	}
+	if(req.body.application_status === 'accepted'){
+		await sendEmail(beneficiary.full_name, beneficiary.email)
 	}
 	await beneficiary.update(req.body)
 	res.status(StatusCodes.OK).json(beneficiary)
