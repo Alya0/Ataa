@@ -1,7 +1,7 @@
-const e = require("express")
 const { StatusCodes } = require("http-status-codes")
-const { BadRequestError, UnauthenticatedError } = require('../errors')
+const {NotFoundError,	UnauthenticatedError} = require('../errors')
 const {User, Donation, Project, sequelize} = require("../models")
+const bcrypt = require('bcryptjs')
 
 
 const get = async(req, res)=>{
@@ -55,6 +55,19 @@ const edit = async(req, res)=>{
 	} = req
 	
 	const user = await User.findByPk(id)
+	if(!user){
+		throw new NotFoundError(`No user with id ${id}`)
+	}
+	if(req.body.password){
+		const old_password = req.body.old_password
+		const isPasswordCorrect = await user.comparePassword(old_password)
+		if(!isPasswordCorrect){
+			throw new UnauthenticatedError('Old password is incorrect')
+	}
+	const salt = await bcrypt.genSalt(10)
+ const hashedPassword = await bcrypt.hash(req.body.password, salt)
+	req.body.password = hashedPassword
+	}
 	await user.update(req.body)
 	res.status(StatusCodes.OK).json(user)
 }
