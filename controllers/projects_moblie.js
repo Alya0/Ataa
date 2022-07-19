@@ -39,7 +39,7 @@ const getByTag = async(req, res)=>{
 			WHERE pro_cats.ProjectId = projects.id) AS categories
 		FROM projects
 		INNER JOIN pro_cats ON projects.id = pro_cats.ProjectId
-		WHERE pro_cats.CategoryId = ${category.id}
+		WHERE pro_cats.CategoryId = ${category.id} AND (projects.project_status = "ongoing" OR projects.project_status = "مستمر")
 	`)
 	let projects = results
 	projects.forEach((element)=>{
