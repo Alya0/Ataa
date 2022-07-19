@@ -45,6 +45,15 @@ module.exports = (sequelize, DataTypes) => {
         isNumeric : true
       }
     },
+    email: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      unique: true,
+      validate: {
+        notEmpty: true, 
+        isEmail: true, 
+      }
+    },
     birth_date:{
       type: DataTypes.DATEONLY,
       allowNull: false,

@@ -2,7 +2,7 @@ const { StatusCodes } = require("http-status-codes")
 const { BadRequestError, UnauthenticatedError } = require('../errors')
 const {User} = require("../models")
 const bcrypt = require('bcryptjs')
-const sendAuthCode = require('../messageAuth')
+const {sendCode} = require('../emailMessaging')
 
 
 const login = async(req, res)=>{
@@ -39,7 +39,7 @@ const register = async(req, res)=>{
 	const user = await User.create(credentials)
 
 	//send code
-	await sendAuthCode(user.secret_code, user.email)
+	await sendCode(user.secret_code, user.email)
 	res.status(StatusCodes.CREATED).json(user)
 }
 
@@ -51,7 +51,7 @@ const resendCode = async(req, res)=>{
 	}
 	const secret_code = Math.floor(Math.random() * 10000) 
 	await user.update({ secret_code  })
-	await sendAuthCode(secret_code, user.email)
+	await sendCode(secret_code, user.email)
 	res.status(StatusCodes.OK).json(user)
 }
 

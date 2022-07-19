@@ -27,5 +27,10 @@ router.post('/donate', userController.donate)
 router.get('/projects', projectsController.getAll)
 router.get('/project/:id', projectsController.getOne)
 
+//token check
+router.get('/tokencheck', authenticateUser, (req, res)=>{
+	res.status(200).send()
+})
+
 module.exports = router
 
