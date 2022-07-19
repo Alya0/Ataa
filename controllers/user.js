@@ -30,13 +30,20 @@ const getDonations = async (req, res) =>{
 	} = req
 
 	const [results, metadata] = await sequelize.query(`
-	SELECT donations.ProjectId, donations.date, donations.value, projects.name,
-		(SELECT GROUP_CONCAT(pro_cats.id) FROM pro_cats WHERE projects.id = pro_cats.ProjectId) AS categories
+	SELECT donations.ProjectId, SUBSTRING(donations.date, 1, 10) AS date, donations.value, projects.name,
+		(SELECT GROUP_CONCAT(categories.tag) FROM pro_cats 
+		INNER JOIN categories ON pro_cats.CategoryId = categories.id 
+		WHERE projects.id = pro_cats.ProjectId) AS categories
 	FROM users 
 	INNER JOIN donations on users.id = donations.UserId 
 	INNER JOIN projects ON donations.ProjectId = projects.id
 	WHERE users.id = ${id}`)
-	const user_donations = results
+	let user_donations = results
+	user_donations.forEach((element) => {
+		if(element.categories) {
+			element.categories = element.categories.split(',')
+		}
+	})
 	res.status(StatusCodes.OK).json({hits:user_donations.length, user_donations})
 }
 
