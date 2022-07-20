@@ -72,27 +72,9 @@ const edit = async(req, res)=>{
 	res.status(StatusCodes.OK).json(user)
 }
 
-const donate = async(req, res)=>{
-	const {
-		body:{
-			value,
-			ProjectId
-		},
-		user : {
-			id
-		}
-	} = req
-	//TODO donation verification
-	const date = new Date().toISOString().slice(0, 10)
-	const donation = {value, ProjectId, UserId : id, date}
-	await Donation.create(donation)
-	res.status(StatusCodes.OK).json(donation)
-}
-
 const all = {
 	get,
 	edit,
-	donate,
 	getDonations
 }
 

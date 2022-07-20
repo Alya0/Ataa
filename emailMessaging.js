@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-
+/*benefactor@gmail.com pass 12345678*/
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
