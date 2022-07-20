@@ -6,6 +6,7 @@ const authenticateUser = require('../middleware/auth');
 const mobileAuthController = require('../controllers/mobileAuth')
 const userController = require('../controllers/user')
 const projectsController = require('../controllers/projects_moblie')
+const donationController = require('../controllers/donation')
 
 // auth routes
 router.post('/login', mobileAuthController.login)
@@ -19,18 +20,21 @@ router.get('/profile', userController.get)
 router.post('/profile',userController.edit)
 router.get('/profile/donations',userController.getDonations)
 
-//donation routes
-router.use('/donate', authenticateUser)
-router.post('/donate', userController.donate)
 
 //project route
 router.get('/projects', projectsController.getAll)
 router.get('/projects/:tag', projectsController.getByTag)
 
+//donation routes
+router.post('/donate', authenticateUser, donationController.donate)
+router.get('/donate/success/:value/:ProjectId/:UserId', donationController.donation_success)
+router.get('/donate/cancel', donationController.donation_cancel)
+
 //token check
 router.get('/tokencheck', authenticateUser, (req, res)=>{
 	res.status(200).send()
 })
+
 
 module.exports = router
 
