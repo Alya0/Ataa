@@ -1,5 +1,6 @@
 const paypal = require('paypal-rest-sdk')
 const {Donation} = require("../models")  
+const {BadRequestError} = require('../errors')
 const {StatusCodes} = require('http-status-codes')
 
 const donate = async(req, res)=>{
@@ -42,7 +43,7 @@ const donate = async(req, res)=>{
 
 	paypal.payment.create(create_payment_json, function(error, payment){
 		if(error){
-			throw new Error()
+			throw(error)
 		} else{
 			for(let i = 0; i < payment.links.length; i++){
 				if(payment.links[i].rel === 'approval_url'){
@@ -70,11 +71,11 @@ const donation_success = async(req, res)=>{
 		if(error){
 			throw error
 		} else {
-			payment = JSON.stringify(payment)
+			// payment = JSON.stringify(payment)
 			const date = new Date().toISOString().slice(0, 10)
 			const donation = {value, ProjectId, UserId, date}
 			await Donation.create(donation)
-			res.status(StatusCodes.OK).json(donation)
+			res.status(StatusCodes.OK).json(payment)
 		}
 	})
 }

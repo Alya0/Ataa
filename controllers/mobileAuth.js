@@ -25,7 +25,11 @@ const login = async(req, res)=>{
 
 	const token = user.createJWT()
 
-	res.status(StatusCodes.OK).json({ user: { name: user.full_name }, token })
+	res.status(StatusCodes.OK).json({ user :{
+		full_name : user.full_name ,
+		email : user.email,
+		phone_number: user.phone_number},
+		token })
 }
 
 const register = async(req, res)=>{
@@ -40,7 +44,8 @@ const register = async(req, res)=>{
 
 	//send code
 	await sendCode(user.secret_code, user.email)
-	res.status(StatusCodes.CREATED).json(user)
+	// res.status(StatusCodes.CREATED).json()
+	res.status(StatusCodes.CREATED).json(user.dataValues.secret_code)
 }
 
 const resendCode = async(req, res)=>{
@@ -52,7 +57,8 @@ const resendCode = async(req, res)=>{
 	const secret_code = Math.floor(Math.random() * 10000) 
 	await user.update({ secret_code  })
 	await sendCode(secret_code, user.email)
-	res.status(StatusCodes.OK).json(user)
+	// res.status(StatusCodes.OK).json()
+	res.status(StatusCodes.OK).json(user.dataValues.secret_code)
 }
 
 const verifyRegister = async(req, res)=>{
@@ -75,8 +81,11 @@ const verifyRegister = async(req, res)=>{
 	await user.update({ is_active: true })
 	//generate tokens
 	const token = user.createJWT()
-
-	res.status(StatusCodes.OK).json({ user: { name: user.full_name }, token })
+	res.status(StatusCodes.OK).json({ user :{
+		full_name : user.full_name ,
+		email : user.email,
+		phone_number: user.phone_number},
+		token })
 }
 
 const all = {
