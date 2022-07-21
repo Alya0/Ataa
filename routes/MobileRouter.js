@@ -27,6 +27,7 @@ router.get('/projects/:tag', projectsController.getByTag)
 
 //donation routes
 router.post('/donate', authenticateUser, donationController.donate)
+// router.use('/donate/success/:value/:ProjectId/:UserId',express.static('./public'));
 router.get('/donate/success/:value/:ProjectId/:UserId', donationController.donation_success)
 router.get('/donate/cancel', donationController.donation_cancel)
 

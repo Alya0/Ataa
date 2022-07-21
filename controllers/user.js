@@ -14,7 +14,7 @@ const get = async(req, res)=>{
 	const user = await User.findByPk(id)
 	const user_donations = await Donation.sum('value', {where: {UserId : id}});
 	user.dataValues.donations = (user_donations === null ? 0 : user_donations)
-	res.status(StatusCodes.OK).json(user)
+	res.status(StatusCodes.OK).json({donations : user.dataValues.donations})
 }
 
 const getDonations = async (req, res) =>{
@@ -43,7 +43,14 @@ const getDonations = async (req, res) =>{
 			element.categories = []
 		}
 	})
-	res.status(StatusCodes.OK).json({hits:user_donations.length, user_donations})
+	user_donations.forEach(element=>{
+		element.categories.forEach(category=>{
+			if(category === element.name){
+				element.name = ""
+			}
+		})
+	})
+	res.status(StatusCodes.OK).json({user_donations})
 }
 
 const edit = async(req, res)=>{
@@ -69,7 +76,10 @@ const edit = async(req, res)=>{
 	req.body.password = hashedPassword
 	}
 	await user.update(req.body)
-	res.status(StatusCodes.OK).json(user)
+	res.status(StatusCodes.OK).json({ user :{
+		full_name : user.full_name ,
+		email : user.email,
+		phone_number: user.phone_number}})
 }
 
 const all = {
