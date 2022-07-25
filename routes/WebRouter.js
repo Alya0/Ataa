@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //get controllers
-const {all} = require('../controllers/beneficiaries');
+const beneficiaryController = require('../controllers/beneficiaries');
 const {employeeController} = require('../controllers/employee');
 const {projectController} = require('../controllers/project');
 const {webAuth} = require('../controllers/webAuth');
@@ -13,9 +13,10 @@ const { upload } = require('../controllers/imagesetter');
 router.post('/login', webAuth.login);
 
 //beneficiaries
-router.get('/beneficiaries/:status', authenticationMiddleware, all.getAll);
-router.route('/beneficiary/create').post(authenticationMiddleware ,upload ,all.create);
-router.route('/beneficiary/:id').get(authenticationMiddleware, all.getOne).post(authenticationMiddleware, upload, all.edit).delete(authenticationMiddleware, all.del);
+router.get('/beneficiaries/:status',, beneficiaryController.getAll);
+router.route('/beneficiary/create').post(authenticationMiddleware, upload ,beneficiaryController.create);
+router.route('/beneficiary/:id').get(authenticationMiddleware, beneficiaryController.getOne).post(authenticationMiddleware, upload ,beneficiaryController.edit).delete(authenticationMiddleware, beneficiaryController.del);
+
 
 //employee routes
 router.route('/employee/create').post(authenticationMiddleware ,upload ,employeeController.create);
