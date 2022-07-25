@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Employee.hasMany(models.Activity, {
-        foreignKey: "activity_id",
         onDelete: "cascade"
-      })
+      }),
+      Employee.belongsTo(models.Role)
     }
   }
   Employee.init({
@@ -165,6 +165,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     image: {
       type: DataTypes.STRING
+    },
+    status:{
+      type: DataTypes.ENUM,
+      values:['معلق', 'مقبول', 'مرفوض','pending', 'accepted', 'rejected'],
+      defaultValue: 'مقبول'
     },
     type: {
       type: DataTypes.ENUM,

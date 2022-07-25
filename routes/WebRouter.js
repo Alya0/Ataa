@@ -22,6 +22,8 @@ router.route('/employee/create').post(authenticationMiddleware ,upload ,employee
 router.route('/employee/:id').get(authenticationMiddleware ,employeeController.read).delete(authenticationMiddleware ,employeeController.destroy).post(authenticationMiddleware ,upload ,employeeController.update);
 
 //project routes
+router.route('/project/add').post(authenticationMiddleware ,projectController.add);
+router.route('/project/edit/:id').get(authenticationMiddleware ,projectController.edit);
 router.route('/project/create').post(authenticationMiddleware ,upload ,projectController.create);
 router.route('/project/:id').post(authenticationMiddleware ,upload ,projectController.update).get(authenticationMiddleware ,projectController.read).delete(authenticationMiddleware ,projectController.destroy);
 

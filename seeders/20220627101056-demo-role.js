@@ -15,17 +15,17 @@ module.exports = {
     */
     const salt = await bcrypt.genSalt(10);
     return queryInterface.bulkInsert('Roles', [{
-      username: 'Manager',
+      username: 'مدير',
       password: await bcrypt.hash(process.env.Manager, salt),//process.env.Manager
       createdAt: new Date(),
       updatedAt: new Date()
     },{
-      username: 'Project_Manager',
+      username: 'مدير مشاريع',
       password: await bcrypt.hash(process.env.Project_Manager, salt),
       createdAt: new Date(),
       updatedAt: new Date()
     },{
-      username: 'Worker',
+      username: 'موظف',
       password: await bcrypt.hash(process.env.Worker, salt),
       createdAt: new Date(),
       updatedAt: new Date()

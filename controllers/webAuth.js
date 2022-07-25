@@ -11,18 +11,18 @@ const login = async(req, res)=>{
 
     const role = await Role.findOne({where: {username}});
     if(!role){
-        throw new UnauthenticatedError('Invalid Credentials')
+        return res.status(StatusCodes.UNAUTHORIZED).json({'username': 'Invalid username'});
     }
 
     const isPasswordCorrect = await role.comparePassword(password);
 
     if(!isPasswordCorrect){
-        throw new UnauthenticatedError('Invalid Credentials')
+        return res.status(StatusCodes.UNAUTHORIZED).json({'password': 'Invalid password'});
     }
 
     const token = role.createJWT();
 
-    res.status(StatusCodes.OK).json({ token })
+    res.status(StatusCodes.OK).json({ token, 'username': username })
 };
 
 const webAuth = {

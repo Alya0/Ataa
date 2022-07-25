@@ -17,14 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     active: {
       type: DataTypes.BOOLEAN,
       allowNull: false
-    },
-    start_date:{
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
-    },
-    end_date: {
-      type: DataTypes.DATE,
     }
   }, {
     sequelize,
