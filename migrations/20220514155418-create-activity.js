@@ -11,16 +11,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      aaa: {
+      active: {
         type: Sequelize.BOOLEAN
-      },
-      start_date:{
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-        allowNull: false,
-      },
-      end_date: {
-        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,

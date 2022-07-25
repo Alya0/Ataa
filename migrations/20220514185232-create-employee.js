@@ -76,6 +76,10 @@ module.exports = {
         isIn: [['ممول', 'عام']],
         notEmpty: true,
       },
+      status:{
+        type: Sequelize.ENUM,
+        values:[['معلق', 'مقبول', 'مرفوض','pending', 'accepted', 'rejected']]
+      }
     });
   },
   async down(queryInterface, Sequelize) {

@@ -15,6 +15,7 @@ paypal.configure({
 const {sequelize} = require('./models');
 const queryInterface = sequelize.getQueryInterface();
 const Role = require('./seeders/20220627101056-demo-role');
+const Category = require('./seeders/20220720181850-demo-category');
 
 const webRouter = require('./routes/WebRouter');
 const mobileRouter = require('./routes/MobileRouter');
@@ -40,6 +41,7 @@ const start = async () => {
 			await sequelize.authenticate();
 			// await sequelize.sync({force: true});
 			// await Role.up(queryInterface, sequelize);
+			// await Category.up(queryInterface, sequelize);
 			app.listen(port,
 				console.log(`Server is listening on port ${port}...`)
 			);
