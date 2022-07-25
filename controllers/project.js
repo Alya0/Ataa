@@ -23,10 +23,12 @@ const create = async (req, res) => {
         throw new BadRequestError('You Do not have the permission');
     }
     const project = {...req.body};
-    if (!req.file)
+    if (!req.file) {
         project.image = null;
-    else
+    }
+    else {
         project.image = req.file.path;
+    }
     const pro = await Project.create(project);
     let projectEmployee = JSON.parse(req.body.projectEmployees);
     let projectBen = JSON.parse(req.body.projectBeneficiaries);
@@ -227,7 +229,7 @@ const update = async (req, res) => {
 };
 
 const destroy = async (req, res) => {
-    if(req.user.username === 'Worker'){
+    if(req.user.username === 'موظف'){
         throw new BadRequestError('You Do not have the permission');
     }
     const project = await Project.findOne({
