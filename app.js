@@ -10,6 +10,14 @@ var express = require('express')
 
 const cors = require('cors')
 
+//payement configuration
+const paypal = require('paypal-rest-sdk')
+paypal.configure({
+	'mode': 'sandbox', //sandbox or live
+	'client_id': 'Abn2SuKt_E42GFT1SO4VUSpT4w-HyCz8mNu17MbWjnkdET7_Zp1jsyHHE17qtY7eogAyMyZuKBdRAEEN',
+	'client_secret': 'EH_BbrTjPVI6SYjHNL_5Sfa74Wnl1Gavs5KlOpSdGiXQ4Nno5yFVJhONWbkoaqjCbFR8QAyZ7Q9IfVFG'
+});
+
 const {sequelize} = require('./models');
 const queryInterface = sequelize.getQueryInterface();
 const Role = require('./seeders/20220627101056-demo-role');
