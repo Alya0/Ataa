@@ -17,7 +17,7 @@ const index = async (req, res) => {
 
 const create = async (req, res) => {
     if(!(req.user.username === 'مدير')){
-        throw new BadRequestError('You Do not have the permission');
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     const emp = {...req.body};
     let role = await Role.findOne({
@@ -27,6 +27,10 @@ const create = async (req, res) => {
         }
     });
     emp.RoleId = role.id;
+    if(emp.type === 'متطوع'){
+        emp.status = 'معلق';
+        emp.RoleId = 4;
+    }
     if (!req.file)
         emp.image = null;
     else
@@ -37,7 +41,7 @@ const create = async (req, res) => {
 
 const read = async (req, res) => {
     if(!(req.user.username === 'مدير')){
-        throw new BadRequestError('You Do not have the permission');
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     const emp = await Employee.findOne({
         where: {
@@ -55,8 +59,9 @@ const read = async (req, res) => {
 };
 
 const update = async (req, res) => {
+    console.log(req.body);
     if(!(req.user.username === 'مدير')){
-        throw new BadRequestError('You Do not have the permission');
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     const emp = await Employee.findOne({
         where: {
@@ -90,7 +95,7 @@ const update = async (req, res) => {
 
 const destroy = async (req, res) => {
     if(!(req.user.username === 'مدير')){
-        throw new BadRequestError('You Do not have the permission');
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     const emp = await Employee.findOne({
         where: {

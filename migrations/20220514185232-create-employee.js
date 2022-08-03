@@ -11,11 +11,11 @@ module.exports = {
       full_name: {
         type: Sequelize.STRING,
         notEmpty: true,
-        isAlpha: true,
       },
       ID_number: {
         type: Sequelize.STRING,
         notEmpty: true,
+        unique: true,
       },
       email: {
         type: Sequelize.STRING,

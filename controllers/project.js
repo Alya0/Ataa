@@ -1,8 +1,8 @@
-const { Project, Beneficiary, Employee, Role, Activity, Benefit, Pro_Cat, Category } = require('../models');
+const { sequelize, Project, Beneficiary, Employee, Role, Activity, Benefit, Pro_Cat, Category, Donation } = require('../models');
 const { NotFoundError } = require('../errors/not-found');
 const { BadRequestError } = require('../errors/bad-request');
 const { StatusCodes } = require('http-status-codes');
-const { Op } = require('sequelize')
+const { Op } = require('sequelize');
 const fs = require('fs');
 const {promisify} = require('util');
 const unlinkAsync = promisify(fs.unlink);
@@ -10,17 +10,14 @@ const unlinkAsync = promisify(fs.unlink);
 const path = require('path');
 
 const index = async (req, res) =>{
-    try {
-        const all = await Project.findAll();
-        return res.json(all);
-    } catch (e) {
-        return res.json(e);
-    }
+    const [results, metadata] = await sequelize.query("SELECT * FROM projects");
+    // const all = await Project.findAll();
+    return res.status(StatusCodes.OK).json(results);
 };
 
 const create = async (req, res) => {
     if(req.user.username === 'موظف'){
-        throw new BadRequestError('You Do not have the permission');
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     const project = {...req.body};
     if (!req.file) {
@@ -59,13 +56,13 @@ const create = async (req, res) => {
 
 const add = async (req, res) => {
     if(req.user.username === 'موظف'){
-        throw new BadRequestError('You Do not have the permission');
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     let beneficiaries = await Beneficiary.findAll({
         attributes: ['id', 'full_name', 'image','province','application_status']
     });
     let emoloyees = await Employee.findAll({
-        attributes: ['id', 'full_name', 'image','status'],
+        attributes: ['id', 'full_name', 'image','type','status'],
         include: {
             model:Role,
             attributes:['username']
@@ -79,16 +76,20 @@ const add = async (req, res) => {
 
 const read = async (req, res) =>{
     if(req.user.username === 'موظف'){
-        throw new BadRequestError('You Do not have the permission');
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     const project = await Project.findOne({
         where:{
             id: req.params.id
-        }
+        },
+        // include:{
+        //     model:Donation
+        // }
     });
     if(!project){
         throw new NotFoundError("project not found");
     }
+    const money = await Donation.sum('value', { where: { ProjectId: project.id } });
     let empId = await Activity.findAll({
         attributes:['EmployeeId'],
         where: {
@@ -111,7 +112,7 @@ const read = async (req, res) =>{
     let beneficiaryId = benID.map(ben => ben.BeneficiaryId);
     let categoryId = catID.map(cat => cat.CategoryId);
     const emp = await Employee.findAll({
-        attributes:['id', 'full_name', 'image', 'province', 'status']
+        attributes:['id', 'full_name', 'image', 'type', 'status']
         ,where:{
             id: employeeId
         },
@@ -127,17 +128,17 @@ const read = async (req, res) =>{
         },
     });
     const cat = await Category.findAll({
-        attributes:['tag'],
+        attributes:['id','tag'],
         where:{
             id:categoryId
         }
     });
-    return res.status(StatusCodes.OK).json({project: project, categories:cat, emp: emp, ben:ben});
+    return res.status(StatusCodes.OK).json({project: project, money:money, categories:cat, emp: emp, ben:ben});
 };
 
 const edit = async (req, res) =>{
     if(req.user.username === 'موظف'){
-        throw new BadRequestError('You Do not have the permission');
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     const project = await Project.findOne({
         where:{
@@ -169,7 +170,7 @@ const edit = async (req, res) =>{
     let beneficiaryId = benID.map(ben => ben.BeneficiaryId);
     let categoryId = catID.map(cat => cat.CategoryId);
     const emp = await Employee.findAll({
-        attributes:['id', 'full_name', 'image','province','status']
+        attributes:['id', 'full_name', 'image','type','status']
         ,where:{
             id: {
                 [Op.notIn]:employeeId
@@ -200,8 +201,8 @@ const edit = async (req, res) =>{
 };
 
 const update = async (req, res) => {
-    if(req.user.username === 'Worker'){
-        throw new BadRequestError('You Do not have the permission');
+    if(req.user.username === 'موظف'){
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     const project = await Project.findOne({
         where: {
@@ -211,26 +212,46 @@ const update = async (req, res) => {
     if (!project) {
         throw new NotFoundError("Employee Not Found");
     }
-    try {
-        const pro = {...req.body};
-        if (project.image && req.file){
-            const p = project.image;
-            await unlinkAsync(p);
-            pro.image = req.file.path;
-        }
-        else if(req.file){
-            pro.image = req.file.path;
-        }
-        await project.update(pro);
-        return res.status(StatusCodes.OK).json(project);
-    } catch (e) {
-        throw new BadRequestError(e.message);
+    const pro = {...req.body};
+    if (project.image && req.file){
+        const p = project.image;
+        await unlinkAsync(p);
+        pro.image = req.file.path;
     }
+    else if(req.file){
+        pro.image = req.file.path;
+    }
+    let projectEmployee = JSON.parse(req.body.projectEmployees);
+    let projectBen = JSON.parse(req.body.projectBeneficiaries);
+    let projectCat = JSON.parse(req.body.projectCategories);
+    projectEmployee.forEach(async (item) => {
+        await Activity.create({
+            active:true,
+            EmployeeId:item,
+            ProjectId:project.id
+        });
+    });
+    projectBen.forEach(async (item) => {
+        await Benefit.create({
+            date:Date.now(),
+            BeneficiaryId:item,
+            ProjectId:project.id
+        });
+    });
+    projectCat.forEach(async (item) => {
+        await Pro_Cat.create({
+            date: Date.now(),
+            CategoryId: item,
+            ProjectId: project.id
+        });
+    });
+    await project.update(pro);
+    return res.status(StatusCodes.OK).json(project);
 };
 
 const destroy = async (req, res) => {
     if(req.user.username === 'موظف'){
-        throw new BadRequestError('You Do not have the permission');
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
     }
     const project = await Project.findOne({
         where: {

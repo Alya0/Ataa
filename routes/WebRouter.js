@@ -23,6 +23,7 @@ router.route('/employee/:id').get(authenticationMiddleware ,employeeController.r
 
 //project routes
 router.route('/project/add').post(authenticationMiddleware ,projectController.add);
+router.route('/project/all').get(authenticationMiddleware ,projectController.index());
 router.route('/project/edit/:id').get(authenticationMiddleware ,projectController.edit);
 router.route('/project/create').post(authenticationMiddleware ,upload ,projectController.create);
 router.route('/project/:id').post(authenticationMiddleware ,upload ,projectController.update).get(authenticationMiddleware ,projectController.read).delete(authenticationMiddleware ,projectController.destroy);

@@ -1,8 +1,14 @@
 require('dotenv').config();
 require('express-async-errors');  // we use this package so we dont write our middleware error
 
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
+var express = require('express')
+	, http = require('http')
+	, app = express()
+	, server = http.createServer(app);
+
+const cors = require('cors')
 
 const {sequelize} = require('./models');
 const queryInterface = sequelize.getQueryInterface();
@@ -16,7 +22,9 @@ const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(express.json());
-
+app.use(cors({
+	origin : "*"
+}));
 //middleware
 
 app.use('/api/w',webRouter);
@@ -37,6 +45,16 @@ const start = async () => {
 			app.listen(port,
 				console.log(`Server is listening on port ${port}...`)
 			);
+		// server.listen(3000,'192.168.156.109',function(){
+		// 	app.listen(port,
+		// 		console.log(`Server is listening on port ${port}...`)
+		// 	);
+		// 	// server.close(function(){
+		// 	// 	app.listen(port,
+		// 	// 		console.log(`Server is listening on port ${port}...`)
+		// 	// 	);
+		// 	// })
+		// })
 	} catch (error) {
 			console.log(error);
 	}
