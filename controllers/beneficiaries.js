@@ -1,5 +1,5 @@
 
-const {Beneficiary , Ben_Cat, Benefit} = require('../models')
+const {Beneficiary , Ben_Cat, Benefit, Project, sequelize} = require('../models')
 const {StatusCodes} = require('http-status-codes');
 const { NotFoundError} = require('../errors');
 const {BadRequestError} = require('../errors/bad-request');
@@ -30,7 +30,6 @@ const getAll = async(req, res)=>{
 };
 
 const create = async(req, res)=>{
-	// TODO : projects for ben
 	if(req.user.username === "مدير مشاريع"){
 		return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
 	}
@@ -56,11 +55,19 @@ const getOne = async(req, res)=>{
 	if( !beneficiary ){
 		throw new NotFoundError(`No beneficiary with id ${id}`);
 	}
+	
 	beneficiary.dataValues.categories = await Ben_Cat.findAll({
 		attributes : ['CategoryId'],
 		where : {BeneficiaryId : beneficiary.id}
 	})
-	res.status(StatusCodes.OK).json(beneficiary)
+
+	const [results, metadata] = await sequelize.query(`
+	SELECT projects.id AS ProjectId , projects.name , projects.project_type AS type FROM benefits
+	INNER JOIN projects ON projects.id = benefits.ProjectId
+	WHERE benefits.BeneficiaryId = ${beneficiary.id}
+	`)
+	beneficiary.dataValues.projects = results
+	res.status(StatusCodes.OK).json({beneficiary})
 };
 
 const edit = async(req, res)=>{

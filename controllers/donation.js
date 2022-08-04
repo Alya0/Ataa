@@ -1,5 +1,5 @@
 const paypal = require('paypal-rest-sdk')
-const {Donation} = require("../models")  
+const {Donation, Project} = require("../models")  
 const {BadRequestError} = require('../errors')
 const {StatusCodes} = require('http-status-codes')
 
@@ -75,6 +75,15 @@ const donation_success = async(req, res)=>{
 			const date = new Date().toISOString().slice(0, 10)
 			const donation = {value, ProjectId, UserId, date}
 			await Donation.create(donation)
+
+			//TODO test following code:
+			const raised_money = await Donation.sum('value', {where: {ProjectId}})
+			const project = await Project.findByPk(ProjectId)
+			if(raised_money >= project.target_money){
+				project.project_status = 'منتهي';
+				await project.update(project);
+			}
+
 			res.status(StatusCodes.OK).json(payment)
 		}
 	})
