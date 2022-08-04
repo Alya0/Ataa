@@ -99,11 +99,11 @@ module.exports = {
         defaultValue: 'خالي من الامراض السارية و المعدية'
       },
       residential_status:{
-        type: Sequelize.ENUM,
-        values: [
-          'ملك',
-          'اجار'
-        ],
+        type: Sequelize.TEXT,
+        // values: [
+        //   'ملك',
+        //   'اجار'
+        // ],
         allowNull: false
       },
       image: {

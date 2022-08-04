@@ -29,6 +29,11 @@ module.exports = {
       password: await bcrypt.hash(process.env.Worker, salt),
       createdAt: new Date(),
       updatedAt: new Date()
+    },{
+      username: 'متطوع',
+      password: await bcrypt.hash(process.env.Vol, salt),
+      createdAt: new Date(),
+      updatedAt: new Date()
     }]);
   },
 

@@ -25,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: false,
         notEmpty: true,
-        isAlpha: true,
       }
     },
     ID_number:{
@@ -35,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: true,
         notEmpty: true,
+        //unique:true
       }
     },
     email: {

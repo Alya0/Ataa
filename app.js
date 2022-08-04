@@ -1,8 +1,14 @@
 require('dotenv').config();
 require('express-async-errors');  // we use this package so we dont write our middleware error
 
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
+var express = require('express')
+	, http = require('http')
+	, app = express()
+	, server = http.createServer(app);
+
+const cors = require('cors')
 
 //payement configuration
 const paypal = require('paypal-rest-sdk')
@@ -16,6 +22,7 @@ const {sequelize} = require('./models');
 const queryInterface = sequelize.getQueryInterface();
 const Role = require('./seeders/20220627101056-demo-role');
 const Category = require('./seeders/20220720181850-demo-category');
+const Project = require('./seeders/20220804085428-demo-project');
 
 const webRouter = require('./routes/WebRouter');
 const mobileRouter = require('./routes/MobileRouter');
@@ -24,7 +31,9 @@ const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(express.json());
-
+app.use(cors({
+	origin : "*"
+}));
 //middleware
 
 app.use('/api/w',webRouter);
@@ -39,12 +48,23 @@ const port = process.env.PORT || 3000;
 const start = async () => {
 	try {
 			await sequelize.authenticate();
-			// await sequelize.sync({force: true});
-			// await Role.up(queryInterface, sequelize);
-			// await Category.up(queryInterface, sequelize);
+			await sequelize.sync({force: true});
+			await Role.up(queryInterface, sequelize);
+			await Category.up(queryInterface, sequelize);
+			await Project.up(queryInterface, sequelize);
 			app.listen(port,
 				console.log(`Server is listening on port ${port}...`)
 			);
+		// server.listen(3000,'192.168.29.109',function(){
+		// 	app.listen(port,
+		// 		console.log(`Server is listening on port ${port}...`)
+		// 	);
+		// 	// server.close(function(){
+		// 	// 	app.listen(port,
+		// 	// 		console.log(`Server is listening on port ${port}...`)
+		// 	// 	);
+		// 	// })
+		// })
 	} catch (error) {
 			console.log(error);
 	}

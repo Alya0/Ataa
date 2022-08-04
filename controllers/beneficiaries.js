@@ -1,5 +1,5 @@
 
-const {Beneficiary , Ben_Cat} = require('../models')
+const {Beneficiary , Ben_Cat, Benefit} = require('../models')
 const {StatusCodes} = require('http-status-codes');
 const { NotFoundError} = require('../errors');
 const {BadRequestError} = require('../errors/bad-request');
@@ -8,12 +8,16 @@ const {promisify} = require('util');
 const unlinkAsync = promisify(fs.unlink);
 const {sendEmail} = require('../emailMessaging')
 
-
 const getAll = async(req, res)=>{
+	if(req.user.username === "مدير مشاريع"){
+		return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
+	}
 	const {status} = req.params
 	let beneficiaries;
 	if(status == 'all'){
-		beneficiaries = await Beneficiary.findAll()
+		beneficiaries = await Beneficiary.findAll({
+			attributes:['id','full_name','birth_date','application_status','gender','province']
+		})
 	}
 	else{
 		beneficiaries = await Beneficiary.findAll({
@@ -26,27 +30,26 @@ const getAll = async(req, res)=>{
 };
 
 const create = async(req, res)=>{
-	if(req.user.username === "Project_Manager"){
-		throw new BadRequestError('You Do not have the permission');
+	// TODO : projects for ben
+	if(req.user.username === "مدير مشاريع"){
+		return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
 	}
 	const beneficiary = {...req.body};
 	if (!req.file)
 		beneficiary.image = null;
 	else
 		beneficiary.image = req.file.path;
-	await Beneficiary.create(beneficiary);
-  const categories = req.body.categories
-  // TODO : make categories list it is currently a string
+	const ben = await Beneficiary.create(beneficiary);
+	let categories = JSON.parse(req.body.benCategories);
 	categories.forEach(async(element) =>{
-		await Ben_Cat.create({BeneficiaryId : beneficiary.id, CategoryId : element})
-	})
+		await Ben_Cat.create({BeneficiaryId : ben.id, CategoryId : element})
+	});
 	res.status(StatusCodes.CREATED).json(beneficiary);
 };
 
-
 const getOne = async(req, res)=>{
-	if(req.user.username === "Project_Manager"){
-		throw new BadRequestError('You Do not have the permission');
+	if(req.user.username === "مدير مشاريع"){
+		return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
 	}
 	const {id} = req.params;
 	const beneficiary = await Beneficiary.findByPk(id);
@@ -61,8 +64,8 @@ const getOne = async(req, res)=>{
 };
 
 const edit = async(req, res)=>{
-	if(req.user.username === "Project_Manager"){
-		throw new BadRequestError('You Do not have the permission');
+	if(req.user.username === "مدير مشاريع"){
+		return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
 	}
 	const {id} = req.params;
 	const beneficiary = await Beneficiary.findByPk(id);
@@ -70,7 +73,10 @@ const edit = async(req, res)=>{
 		throw new NotFoundError(`No beneficiary with id ${id}`);
 	}
 	const benef = {...req.body};
-	if (beneficiary.image && req.file){
+	if(benef.image === 'null'){
+		benef.image = beneficiary.image;
+	}
+	else if (beneficiary.image && req.file){
 		const p = beneficiary.image;
 		await unlinkAsync(p);
 		benef.image = req.file.path;
@@ -78,10 +84,10 @@ const edit = async(req, res)=>{
 	else if(req.file){
 		benef.image = req.file.path;
 	}
-  if(req.body.application_status === 'accepted'){
+  if(req.body.application_status === 'accepted' || req.body.application_status === 'مقبول'){
 		await sendEmail(beneficiary.full_name, beneficiary.email)
 	}
-	const categories = req.body.categories
+	const categories = JSON.parse(req.body.benCategories);
 	if(categories){
 		await Ben_Cat.destroy({
 			where : {BeneficiaryId : beneficiary.id}
@@ -93,13 +99,10 @@ const edit = async(req, res)=>{
 	await beneficiary.update(benef);
 	res.status(StatusCodes.OK).json(beneficiary);
 };
-	
-
-
 
 const del = async(req, res)=>{
-	if(req.user.username === "Project_Manager"){
-		throw new BadRequestError('You Do not have the permission');
+	if(req.user.username === "مدير مشاريع"){
+		return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
 	}
 	const {id} = req.params;
 	const beneficiary = await Beneficiary.findByPk(id);
