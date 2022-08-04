@@ -39,6 +39,10 @@ module.exports = {
         ],
         allowNull: false
       },
+      description: {
+        type: Sequelize.STRING,
+        notEmpty: true,
+      },
       project_type:{
         allowNull: false,
         type: Sequelize.ENUM,

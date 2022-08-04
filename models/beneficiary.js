@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true, 
-        isAlpha : true
+        //isAlpha : true
       }
     },
     ID_number:{
@@ -155,11 +155,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'خالي من الامراض السارية و المعدية'
     },
     residential_status:{
-      type: DataTypes.ENUM,
-      values: [
-        'ملك',
-        'اجار'
-      ],
+      type: DataTypes.TEXT,
+      // values: [
+      //   'ملك',
+      //   'اجار'
+      // ],
       allowNull: false,
       validate:{
         notEmpty : true
@@ -170,9 +170,12 @@ module.exports = (sequelize, DataTypes) => {
       values:[
         'pending',
         'accepted',
-        'rejected'
+        'rejected',
+          'مقبول',
+          'معلق',
+          'مرفوض'
       ],
-      defaultValue: 'pending'
+      defaultValue: 'معلق'
     },
     image: {
       type: DataTypes.STRING

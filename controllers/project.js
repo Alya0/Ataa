@@ -10,9 +10,32 @@ const unlinkAsync = promisify(fs.unlink);
 const path = require('path');
 
 const index = async (req, res) =>{
-    const [results, metadata] = await sequelize.query("SELECT * FROM projects");
-    // const all = await Project.findAll();
-    return res.status(StatusCodes.OK).json(results);
+    if(req.user.username === 'موظف'){
+        return res.status(StatusCodes.FORBIDDEN).json('you dont have permission');
+    }
+    const [results, metadata] = await sequelize.query(
+        `SELECT p.id, p.name, p.image, p.target_money, p.start_date, p.province,p.project_type,p.project_status, SUM(d.value) AS money 
+        FROM projects p LEFT OUTER JOIN donations d
+        ON p.id = d.ProjectId
+        GROUP BY p.id`
+    );
+    let charityBudget = await Donation.sum('value');
+    if(charityBudget == null){
+        charityBudget = 0;
+    }
+    results.forEach((item) => {
+        if(item.money == null)
+            item.money = 0;
+    });
+    let programsBudget = await Donation.sum('value',{ where: { ProjectId: { [Op.between]: [1, 4] } } });
+    let projectsBudget = await Donation.sum('value',{ where: { ProjectId: { [Op.notBetween]: [1, 4] } } });
+    if(programsBudget == null){
+        programsBudget = 0;
+    }
+    if(projectsBudget == null){
+        projectsBudget = 0;
+    }
+    return res.status(StatusCodes.OK).json({'project':results, charityBudget:charityBudget,programsBudget:programsBudget, projectsBudget:projectsBudget});
 };
 
 const create = async (req, res) => {
@@ -26,6 +49,7 @@ const create = async (req, res) => {
     else {
         project.image = req.file.path;
     }
+    project.project_status = 'مستمر';
     const pro = await Project.create(project);
     let projectEmployee = JSON.parse(req.body.projectEmployees);
     let projectBen = JSON.parse(req.body.projectBeneficiaries);
@@ -89,7 +113,10 @@ const read = async (req, res) =>{
     if(!project){
         throw new NotFoundError("project not found");
     }
-    const money = await Donation.sum('value', { where: { ProjectId: project.id } });
+    let money = await Donation.sum('value', { where: { ProjectId: project.id } });
+    if(money == null){
+        money = 0;
+    }
     let empId = await Activity.findAll({
         attributes:['EmployeeId'],
         where: {
@@ -213,7 +240,10 @@ const update = async (req, res) => {
         throw new NotFoundError("Employee Not Found");
     }
     const pro = {...req.body};
-    if (project.image && req.file){
+    if(pro.image === 'null'){
+        pro.image = project.image;
+    }
+    else if (project.image && req.file){
         const p = project.image;
         await unlinkAsync(p);
         pro.image = req.file.path;
@@ -221,6 +251,11 @@ const update = async (req, res) => {
     else if(req.file){
         pro.image = req.file.path;
     }
+    await Pro_Cat.destroy({
+        where:{
+            ProjectId: project.id
+        }
+    });
     let projectEmployee = JSON.parse(req.body.projectEmployees);
     let projectBen = JSON.parse(req.body.projectBeneficiaries);
     let projectCat = JSON.parse(req.body.projectCategories);

@@ -35,7 +35,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: true,
         notEmpty: true,
-        isAlpha: true,
       }
     },
     start_date: {
@@ -99,6 +98,14 @@ module.exports = (sequelize, DataTypes) => {
         ],
       },
     },
+    description:{
+      type: DataTypes.TEXT,
+      allowNull:false,
+      validate: {
+        notNull: true,
+        notEmpty:true,
+      }
+    },
     project_type:{
       allowNull: false,
       type: DataTypes.ENUM,
@@ -132,13 +139,13 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     project_status:{
-      defaultValue: 'ongoing',
+      defaultValue: 'مستمر',
       type: DataTypes.ENUM,
       values:[
         'pending',
         'ongoing',
         'finished',
-        'معلق',
+        'ملغى',
         'مستمر',
         'منتهي',
       ],
