@@ -25,11 +25,11 @@ const login = async(req, res)=>{
 
 	const token = user.createJWT()
 
-	res.status(StatusCodes.OK).json({ user :{
+	res.status(StatusCodes.OK).json({
 		full_name : user.full_name ,
 		email : user.email,
-		phone_number: user.phone_number},
-		token })
+		token
+	})
 }
 
 const register = async(req, res)=>{
@@ -81,11 +81,11 @@ const verifyRegister = async(req, res)=>{
 	await user.update({ is_active: true })
 	//generate tokens
 	const token = user.createJWT()
-	res.status(StatusCodes.OK).json({ user :{
+	res.status(StatusCodes.OK).json({
 		full_name : user.full_name ,
 		email : user.email,
-		phone_number: user.phone_number},
-		token })
+		token
+	})
 }
 
 const all = {

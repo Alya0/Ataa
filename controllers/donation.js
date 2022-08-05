@@ -47,7 +47,7 @@ const donate = async(req, res)=>{
 		} else{
 			for(let i = 0; i < payment.links.length; i++){
 				if(payment.links[i].rel === 'approval_url'){
-					res.send(payment.links[i].href)
+					res.json({url : payment.links[i].href})
 				}
 			}
 		}
@@ -78,12 +78,13 @@ const donation_success = async(req, res)=>{
 
 			//TODO test following code:
 			const raised_money = await Donation.sum('value', {where: {ProjectId}})
+			console.log(raised_money);
 			const project = await Project.findByPk(ProjectId)
+			console.log(project.target_money)
 			if(raised_money >= project.target_money){
-				project.project_status = 'منتهي';
-				await project.update(project);
+				const updateVal = {project_status : 'منتهي'};
+				await project.update(updateVal);
 			}
-
 			res.status(StatusCodes.OK).json(payment)
 		}
 	})

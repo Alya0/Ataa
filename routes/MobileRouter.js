@@ -36,6 +36,9 @@ router.get('/tokencheck', authenticateUser, (req, res)=>{
 	res.status(200).send()
 })
 
+//data needed for front
+router.get('/data/miskeen',projectsController.getMiskeenVal)
+router.get('/data/sacrifice',projectsController.getSacrificeVal)
 
 module.exports = router
 
