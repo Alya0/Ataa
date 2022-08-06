@@ -44,11 +44,10 @@ const getDonations = async (req, res) =>{
 		}
 	})
 	user_donations.forEach(element=>{
-		element.categories.forEach(category=>{
-			if(category === element.name){
-				element.name = ""
-			}
-		})
+		if(element.ProjectId < 5){
+			element.categories = [element.name];
+			element.name = "";
+		}
 	})
 	res.status(StatusCodes.OK).json({user_donations})
 }
@@ -57,7 +56,8 @@ const edit = async(req, res)=>{
 	//destructring an object
 	const {
 		user : {
-			id
+			id,
+			token
 		}
 	} = req
 	
@@ -65,7 +65,8 @@ const edit = async(req, res)=>{
 	if(!user){
 		throw new NotFoundError(`No user with id ${id}`)
 	}
-	if(req.body.password){
+	const credentials = {}
+	if(req.body.password != null){
 		const old_password = req.body.old_password
 		const isPasswordCorrect = await user.comparePassword(old_password)
 		if(!isPasswordCorrect){
@@ -73,13 +74,19 @@ const edit = async(req, res)=>{
 	}
 	const salt = await bcrypt.genSalt(10)
  const hashedPassword = await bcrypt.hash(req.body.password, salt)
-	req.body.password = hashedPassword
+	credentials.password = hashedPassword
 	}
-	await user.update(req.body)
-	res.status(StatusCodes.OK).json({ user :{
+	if(req.body.full_name != null){
+		credentials.full_name = req.body.full_name
+	}
+	await user.update(credentials)
+	res.status(StatusCodes.OK).json({
+		user :{
 		full_name : user.full_name ,
 		email : user.email,
-		phone_number: user.phone_number}})
+		phone_number: user.phone_number},
+		token
+	})
 }
 
 const all = {

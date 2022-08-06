@@ -23,6 +23,7 @@ router.get('/profile/donations',userController.getDonations)
 
 //project route
 router.get('/projects', projectsController.getAll)
+router.get('/projects/ads', projectsController.getThreeProjects)
 router.get('/projects/:tag', projectsController.getByTag)
 
 //donation routes
