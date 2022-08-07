@@ -30,5 +30,10 @@ router.route('/project/edit/:id').get(authenticationMiddleware ,projectControlle
 router.route('/project/create').post(authenticationMiddleware ,upload ,projectController.create);
 router.route('/project/:id').post(authenticationMiddleware ,upload ,projectController.update).get(authenticationMiddleware ,projectController.read).delete(authenticationMiddleware ,projectController.destroy);
 
+//check token
+router.get('/tokencheck', authenticationMiddleware, (req, res)=>{
+	res.status(200).send()
+})
+
 module.exports = router;
 
