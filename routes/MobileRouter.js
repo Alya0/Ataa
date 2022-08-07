@@ -7,6 +7,7 @@ const mobileAuthController = require('../controllers/mobileAuth')
 const userController = require('../controllers/user')
 const projectsController = require('../controllers/projects_moblie')
 const donationController = require('../controllers/donation')
+const applicationController = require('../controllers/application_mobile')
 
 // auth routes
 router.post('/login', mobileAuthController.login)
@@ -40,6 +41,11 @@ router.get('/tokencheck', authenticateUser, (req, res)=>{
 //data needed for front
 router.get('/data/miskeen',projectsController.getMiskeenVal)
 router.get('/data/sacrifice',projectsController.getSacrificeVal)
+
+//benef & volunteer application
+router.use('/application', authenticateUser)
+router.post('/application/benef',applicationController.create_benef);
+router.post('/application/volunteer', applicationController.create_volunteer)
 
 module.exports = router
 
