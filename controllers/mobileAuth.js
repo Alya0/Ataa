@@ -26,13 +26,21 @@ const login = async(req, res)=>{
 	const token = user.createJWT()
 
 	res.status(StatusCodes.OK).json({
-		full_name : user.full_name ,
-		email : user.email,
+		user:{
+			full_name : user.full_name ,
+			email : user.email,
+		},
 		token
 	})
 }
 
 const register = async(req, res)=>{
+	const {email} = req.body
+	const userTest = await User.findOne({where:{email}});
+	if(userTest && !userTest.dataValues.is_active){
+		await userTest.destroy()
+	}
+
 	//hash password
 	const credentials = req.body
 	const salt = await bcrypt.genSalt(10)
@@ -44,8 +52,8 @@ const register = async(req, res)=>{
 
 	//send code
 	await sendCode(user.secret_code, user.email)
-	// res.status(StatusCodes.CREATED).json()
-	res.status(StatusCodes.CREATED).json(user.dataValues.secret_code)
+	res.status(StatusCodes.CREATED).json()
+	// res.status(StatusCodes.CREATED).json(user.dataValues.secret_code)
 }
 
 const resendCode = async(req, res)=>{
@@ -57,8 +65,8 @@ const resendCode = async(req, res)=>{
 	const secret_code = Math.floor(Math.random() * 10000) 
 	await user.update({ secret_code  })
 	await sendCode(secret_code, user.email)
-	// res.status(StatusCodes.OK).json()
-	res.status(StatusCodes.OK).json(user.dataValues.secret_code)
+	res.status(StatusCodes.OK).json()
+	// res.status(StatusCodes.OK).json(user.dataValues.secret_code)
 }
 
 const verifyRegister = async(req, res)=>{
@@ -82,8 +90,10 @@ const verifyRegister = async(req, res)=>{
 	//generate tokens
 	const token = user.createJWT()
 	res.status(StatusCodes.OK).json({
-		full_name : user.full_name ,
-		email : user.email,
+		user:{
+			full_name : user.full_name ,
+			email : user.email,
+		},
 		token
 	})
 }

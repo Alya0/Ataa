@@ -25,6 +25,19 @@ const getAll = async(req, res)=>{
 			element.raised = 0
 		}
 	})
+	projects = projects.filter((element)=> element.id > 4)
+	res.status(StatusCodes.OK).json({projects});
+}
+
+const getThreeProjects = async(req, res)=>{
+	let projects = await Project.findAll({
+		attributes: ['id', 'name', 'image'],
+		where:{
+			project_status : 'مستمر'
+		}
+	})
+	projects = projects.filter(element => (element.id > 4))
+	projects = projects.slice(0, 3)
 	res.status(StatusCodes.OK).json({projects});
 }
 
@@ -60,6 +73,7 @@ const getByTag = async(req, res)=>{
 	})
 	res.status(StatusCodes.OK).json({projects})
 }
+
 const getMiskeenVal = async(req, res) => {
 	const result = await Project.findOne({where: {name : 'إطعام مسكين'}})
 	res.status(StatusCodes.OK).json({value:result.target_money})
@@ -74,5 +88,6 @@ module.exports = {
 	getAll, 
 	getByTag,
 	getMiskeenVal,
-	getSacrificeVal
+	getSacrificeVal,
+	getThreeProjects
 }

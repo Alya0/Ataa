@@ -7,21 +7,22 @@ const donate = async(req, res)=>{
 	const {
 		body:{
 			value,
-			ProjectId
+			projectId
 		},
 		user : {
 			id
 		}
 	} = req
 
+	const ProjectId = projectId
 	const create_payment_json = {
 		"intent": "sale",
 		"payer": {
 			"payment_method": "paypal"
 		},
 		"redirect_urls": {
-			"return_url": `http://localhost:3000/api/m/donate/success/${value}/${ProjectId}/${id}`,
-			"cancel_url": "http://localhost:3000/api/m/donate/cancel"
+			"return_url": `http://192.168.43.8:8000/api/m/donate/success/${value}/${ProjectId}/${id}`,
+			"cancel_url": "http://192.168.43.8:8000/api/m/donate/cancel"
 		},
 		"transactions": [{
 			"item_list": {
@@ -76,7 +77,6 @@ const donation_success = async(req, res)=>{
 			const donation = {value, ProjectId, UserId, date}
 			await Donation.create(donation)
 
-			//TODO test following code:
 			const raised_money = await Donation.sum('value', {where: {ProjectId}})
 			console.log(raised_money);
 			const project = await Project.findByPk(ProjectId)
@@ -85,7 +85,7 @@ const donation_success = async(req, res)=>{
 				const updateVal = {project_status : 'منتهي'};
 				await project.update(updateVal);
 			}
-			res.status(StatusCodes.OK).json(payment)
+			res.status(StatusCodes.OK).send('Donation Success')
 		}
 	})
 }
