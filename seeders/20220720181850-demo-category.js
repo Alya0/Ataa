@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    return queryInterface.bulkInsert('categories', [{
+    return queryInterface.bulkInsert('Categories', [{
       tag: 'تعليم',
       createdAt: new Date(),
       updatedAt: new Date()
