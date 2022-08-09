@@ -40,12 +40,13 @@ app.use('/api/w',webRouter);
 app.use('/api/m',mobileRouter);
 app.use('/Images', express.static('./Images'));
 
-app.use(notFoundMiddleware);
-app.use(errorHandlerMiddleware);
-
 app.get('/',(req, res)=>{
 	res.send("HELLOO ATAAAA")
 })
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
+
 
 const port = process.env.PORT || 3000;
 
