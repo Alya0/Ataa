@@ -43,6 +43,9 @@ app.use('/Images', express.static('./Images'));
 app.get('/',(req, res)=>{
 	res.send("HELLOO ATAAAA")
 })
+app.get('/hi',(req, res)=>{
+	res.send("HII ATAAAA")
+})
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
