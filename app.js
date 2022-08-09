@@ -43,6 +43,10 @@ app.use('/Images', express.static('./Images'));
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
+app.get('/',(req, res)=>{
+	res.send("HELLOO ATAAAA")
+})
+
 const port = process.env.PORT || 3000;
 
 const start = async () => {
