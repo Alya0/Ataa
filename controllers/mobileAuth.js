@@ -75,7 +75,6 @@ const resendCode = async(req, res)=>{
 	if(!user){
 		throw new UnauthenticatedError('Invalid Credentials')
 	}
-	const secret_code = Math.floor(Math.random() * 10000)
 	let secret_code = Math.floor(Math.random() * 10000).toString()
 	while(secret_code.length < 4){
 		secret_code += "0";
