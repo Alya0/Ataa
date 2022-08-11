@@ -56,7 +56,7 @@ const register = async(req, res)=>{
 	const user = await User.create(credentials)
 
 	//send code
-	await sendCode(user.secret_code, user.email)
+	sendCode(user.secret_code, user.email)
 	res.status(StatusCodes.CREATED).json()
 	// res.status(StatusCodes.CREATED).json(user.dataValues.secret_code)
 }
@@ -72,7 +72,7 @@ const resendCode = async(req, res)=>{
 		secret_code += "0";
 	}
 	await user.update({ secret_code  })
-	await sendCode(secret_code, user.email)
+	sendCode(secret_code, user.email)
 	res.status(StatusCodes.OK).json()
 	// res.status(StatusCodes.OK).json(user.dataValues.secret_code)
 }
