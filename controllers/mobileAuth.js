@@ -98,7 +98,7 @@ const verifyRegister = async(req, res)=>{
 		throw new UnauthenticatedError('Invalid Credentials')
 	}
 	//check correctness of token
-	const isCodeCorrect = user.compareSecretCode(parseInt(code))
+	const isCodeCorrect = user.compareSecretCode(code.toString())
 	if(!isCodeCorrect){
 		throw new UnauthenticatedError('Invalid Code')
 	}

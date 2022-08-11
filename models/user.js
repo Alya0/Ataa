@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         process.env.JWT_SECRET,
         {expiresIn: process.env.JWT_LIFETIME})
     }
-    compareSecretCode(candidateCode){
+    compareSecretCode(candidateCode){y
       const isMatch = (candidateCode === this.secret_code)
       return isMatch
     }
