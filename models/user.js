@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false
     },
     secret_code:{
-      type: DataTypes.STRING
+      type: DataTypes.INTEGER
     },
     is_active:{
       type: DataTypes.BOOLEAN,

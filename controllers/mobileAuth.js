@@ -51,6 +51,7 @@ const register = async(req, res)=>{
 	while(secret_code.length < 4){
 		secret_code += "0";
 	}
+	secret_code = parseInt(secret_code)
 	credentials.secret_code = secret_code
 	try{
 		const user = await User.create(credentials)
@@ -71,6 +72,7 @@ const resendCode = async(req, res)=>{
 	while(secret_code.length < 4){
 		secret_code += "0";
 	}
+	secret_code = parseInt(secret_code)
 	await user.update({ secret_code  })
 	sendCode(secret_code, user.email)
 	res.status(StatusCodes.OK).json()
@@ -89,7 +91,7 @@ const verifyRegister = async(req, res)=>{
 		throw new UnauthenticatedError('Invalid Credentials')
 	}
 	//check correctness of token
-	const isCodeCorrect = user.compareSecretCode(code.toString())
+	const isCodeCorrect = user.compareSecretCode(parseInt(code))
 	if(!isCodeCorrect){
 		throw new UnauthenticatedError('Invalid Code')
 	}
