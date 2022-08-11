@@ -60,7 +60,7 @@ const start = async () => {
 			app.listen(port,
 				console.log(`Server is listening on port ${port}...`)
 			);
-		// server.listen(8000,'192.168.43.8',function(){
+		// server.listen(3000,'192.168.1.5',function(){
 		// 	app.listen(port,
 		// 		console.log(`Server is listening on port ${port}...`)
 		// 	);
