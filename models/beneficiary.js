@@ -75,17 +75,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     marital_status:{
-      type: DataTypes.ENUM,
-      values:[
-        'أعزب',
-        'متزوج',
-        'أرمل',
-        'مطلق',
-        'single',
-        'widowed',
-        'married',
-        'divorced'
-      ],
+      type: DataTypes.TEXT,
+      // values:[
+      //   'أعزب',
+      //   'متزوج',
+      //   'أرمل',
+      //   'مطلق',
+      //   'single',
+      //   'widowed',
+      //   'married',
+      //   'divorced'
+      // ],
       allowNull: false,
       validate:{
         notEmpty : true
@@ -197,7 +197,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'معلق'
     },
     image: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      defaultValue:'Images\\person.png'
     },
   }, {
     sequelize,

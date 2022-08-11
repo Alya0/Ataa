@@ -48,11 +48,16 @@ const register = async(req, res)=>{
 	credentials.password = hashedPassword
 
 	// create user (creation of secret code happens by default)
-	const user = await User.create(credentials)
+	try{
+		const user = await User.create(credentials)
 
-	//send code
-	await sendCode(user.secret_code, user.email)
-	res.status(StatusCodes.CREATED).json()
+		//send code
+		await sendCode(user.secret_code, user.email)
+		res.status(StatusCodes.CREATED).json()
+	}catch(e){
+		res.status(StatusCodes.BAD_REQUEST).json({msg: 'Email already exists'})
+	}
+
 	// res.status(StatusCodes.CREATED).json(user.dataValues.secret_code)
 }
 
@@ -62,7 +67,7 @@ const resendCode = async(req, res)=>{
 	if(!user){
 		throw new UnauthenticatedError('Invalid Credentials')
 	}
-	const secret_code = Math.floor(Math.random() * 10000) 
+	const secret_code = Math.floor(Math.random() * 10000)
 	await user.update({ secret_code  })
 	await sendCode(secret_code, user.email)
 	res.status(StatusCodes.OK).json()

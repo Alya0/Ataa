@@ -73,7 +73,7 @@ module.exports = {
       },
       type: {
         type: Sequelize.STRING,
-        isIn: [['ممول', 'عام']],
+        isIn: [["volunteer", "employee", "متطوع", "موظف"]],
         notEmpty: true,
       },
       status:{

@@ -37,17 +37,17 @@ module.exports = {
         allowNull: false
       },
       marital_status:{
-        type: Sequelize.ENUM,
-        values:[
-          'أعزب',
-          'متزوج',
-          'أرمل',
-          'مطلق',
-          'single',
-          'widowed',
-          'married',
-          'divorced'
-        ],
+        type: Sequelize.TEXT,
+        // values:[
+        //   'أعزب',
+        //   'متزوج',
+        //   'أرمل',
+        //   'مطلق',
+        //   'single',
+        //   'widowed',
+        //   'married',
+        //   'divorced'
+        // ],
         allowNull: false
       },
       children_number:{

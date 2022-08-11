@@ -148,6 +148,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       image: {
         type: DataTypes.STRING,
+        defaultValue:'Images\\person.png'
       },
       status: {
         type: DataTypes.ENUM,

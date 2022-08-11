@@ -66,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     secret_code:{
       type: DataTypes.INTEGER,
-      defaultValue: Math.floor(Math.random() * 10000)
+      defaultValue: Math.floor(Math.random() * 100000000) % 10079
     },
     is_active:{
       type: DataTypes.BOOLEAN,

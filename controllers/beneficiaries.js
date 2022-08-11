@@ -35,7 +35,7 @@ const create = async(req, res)=>{
 	}
 	const beneficiary = {...req.body};
 	if (!req.file)
-		beneficiary.image = null;
+		beneficiary.image = 'Images\\person.png';
 	else
 		beneficiary.image = req.file.path;
 	const ben = await Beneficiary.create(beneficiary);
@@ -67,7 +67,7 @@ const getOne = async(req, res)=>{
 	WHERE benefits.BeneficiaryId = ${beneficiary.id}
 	`)
 	beneficiary.dataValues.projects = results
-	res.status(StatusCodes.OK).json({beneficiary})
+	res.status(StatusCodes.OK).json(beneficiary)
 };
 
 const edit = async(req, res)=>{
@@ -94,15 +94,17 @@ const edit = async(req, res)=>{
   if(req.body.application_status === 'accepted' || req.body.application_status === 'مقبول'){
 		await sendEmail(beneficiary.full_name, beneficiary.email)
 	}
-	const categories = JSON.parse(req.body.benCategories);
-	if(categories){
-		await Ben_Cat.destroy({
-			where : {BeneficiaryId : beneficiary.id}
-		})
-		categories.forEach(async(element) =>{
-			await Ben_Cat.create({BeneficiaryId : beneficiary.id, CategoryId : element})
-		})
-	}
+  if(req.body.benCategories) {
+	  const categories = JSON.parse(req.body.benCategories);
+	  await Ben_Cat.destroy({
+		  where : {BeneficiaryId : beneficiary.id}
+	  })
+	  categories.forEach(async(element) =>{
+		  await Ben_Cat.create({BeneficiaryId : beneficiary.id, CategoryId : element})
+	  })
+  }//if(categories){
+
+	//}
 	await beneficiary.update(benef);
 	res.status(StatusCodes.OK).json(beneficiary);
 };
@@ -116,7 +118,7 @@ const del = async(req, res)=>{
 	if(!beneficiary){
 		throw new NotFoundError(`No beneficiary with id ${id}`)
 	}
-	if (beneficiary.image)
+	else if (beneficiary.image !== 'Images\\person.png')
 		await unlinkAsync(beneficiary.image);
 	await beneficiary.destroy();
 	res.status(StatusCodes.OK).send()
