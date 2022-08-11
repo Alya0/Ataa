@@ -60,13 +60,13 @@ const start = async () => {
 			// await Role.up(queryInterface, sequelize);
 			// await Category.up(queryInterface, sequelize);
 			// await Project.up(queryInterface, sequelize);
-			// app.listen(port,
-			// 	console.log(`Server is listening on port ${port}...`)
-			// );
-		server.listen(8000,'192.168.211.109',function(){
 			app.listen(port,
 				console.log(`Server is listening on port ${port}...`)
 			);
+		// server.listen(8000,'192.168.211.109',function(){
+		// 	app.listen(port,
+		// 		console.log(`Server is listening on port ${port}...`)
+		// 	);
 		// server.listen(3000,'192.168.1.5',function(){
 		// 	app.listen(port,
 		// 		console.log(`Server is listening on port ${port}...`)
@@ -76,7 +76,7 @@ const start = async () => {
 			// 		console.log(`Server is listening on port ${port}...`)
 			// 	);
 			// })
-		})
+		// })
 	} catch (error) {
 			console.log(error);
 	}
