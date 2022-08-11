@@ -47,6 +47,11 @@ const register = async(req, res)=>{
  const hashedPassword = await bcrypt.hash(credentials.password, salt)
 	credentials.password = hashedPassword
 
+	let secret_code = Math.floor(Math.random() * 10000).toString()
+	while(secret_code.length < 4){
+		secret_code += "0";
+	}
+	credentials.secret_code = secret_code
 	// create user (creation of secret code happens by default)
 	try{
 		const user = await User.create(credentials)
@@ -58,6 +63,9 @@ const register = async(req, res)=>{
 		res.status(StatusCodes.BAD_REQUEST).json({msg: 'Email already exists'})
 	}
 
+	//send code
+	sendCode(user.secret_code, user.email)
+	res.status(StatusCodes.CREATED).json()
 	// res.status(StatusCodes.CREATED).json(user.dataValues.secret_code)
 }
 
@@ -68,8 +76,12 @@ const resendCode = async(req, res)=>{
 		throw new UnauthenticatedError('Invalid Credentials')
 	}
 	const secret_code = Math.floor(Math.random() * 10000)
+	let secret_code = Math.floor(Math.random() * 10000).toString()
+	while(secret_code.length < 4){
+		secret_code += "0";
+	}
 	await user.update({ secret_code  })
-	await sendCode(secret_code, user.email)
+	sendCode(secret_code, user.email)
 	res.status(StatusCodes.OK).json()
 	// res.status(StatusCodes.OK).json(user.dataValues.secret_code)
 }
