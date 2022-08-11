@@ -251,35 +251,42 @@ const update = async (req, res) => {
     else if(req.file){
         pro.image = req.file.path;
     }
-    await Pro_Cat.destroy({
-        where:{
-            ProjectId: project.id
-        }
-    });
-    let projectEmployee = JSON.parse(req.body.projectEmployees);
-    let projectBen = JSON.parse(req.body.projectBeneficiaries);
-    let projectCat = JSON.parse(req.body.projectCategories);
-    projectEmployee.forEach(async (item) => {
-        await Activity.create({
-            active:true,
-            EmployeeId:item,
-            ProjectId:project.id
+    if(req.body.projectEmployees)
+    {
+        let projectEmployee = JSON.parse(req.body.projectEmployees);
+        projectEmployee.forEach(async (item) => {
+            await Activity.create({
+                active:true,
+                EmployeeId:item,
+                ProjectId:project.id
+            });
         });
-    });
-    projectBen.forEach(async (item) => {
-        await Benefit.create({
-            date:Date.now(),
-            BeneficiaryId:item,
-            ProjectId:project.id
+    }
+    if(req.body.projectBeneficiaries){
+        let projectBen = JSON.parse(req.body.projectBeneficiaries);
+        projectBen.forEach(async (item) => {
+            await Benefit.create({
+                date:Date.now(),
+                BeneficiaryId:item,
+                ProjectId:project.id
+            });
         });
-    });
-    projectCat.forEach(async (item) => {
-        await Pro_Cat.create({
-            date: Date.now(),
-            CategoryId: item,
-            ProjectId: project.id
+    }
+    if(req.body.projectCategories){
+        await Pro_Cat.destroy({
+            where:{
+                ProjectId: project.id
+            }
         });
-    });
+        let projectCat = JSON.parse(req.body.projectCategories);
+        projectCat.forEach(async (item) => {
+            await Pro_Cat.create({
+                date: Date.now(),
+                CategoryId: item,
+                ProjectId: project.id
+            });
+        });
+    }
     await project.update(pro);
     return res.status(StatusCodes.OK).json(project);
 };

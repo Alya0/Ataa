@@ -43,6 +43,10 @@ module.exports = {
         type: Sequelize.STRING,
         notEmpty: true,
       },
+      project_goal: {
+        type: Sequelize.STRING,
+        notEmpty: true,
+      },
       project_type:{
         allowNull: false,
         type: Sequelize.ENUM,
@@ -64,7 +68,7 @@ module.exports = {
           'pending',
           'ongoing',
           'finished',
-          'معلق',
+          'ملغى',
           'مستمر',
           'منتهي'
         ],

@@ -106,6 +106,14 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty:true,
       }
     },
+    project_goal:{
+      type: DataTypes.TEXT,
+      allowNull:false,
+      validate: {
+        notNull: true,
+        notEmpty:true,
+      }
+    },
     project_type:{
       allowNull: false,
       type: DataTypes.ENUM,
@@ -154,7 +162,7 @@ module.exports = (sequelize, DataTypes) => {
           'pending',
           'ongoing',
           'finished',
-          'معلق',
+          'ملغى',
           'مستمر',
           'منتهي',
         ]]

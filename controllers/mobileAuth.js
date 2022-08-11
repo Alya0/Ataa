@@ -53,7 +53,15 @@ const register = async(req, res)=>{
 	}
 	credentials.secret_code = secret_code
 	// create user (creation of secret code happens by default)
-	const user = await User.create(credentials)
+	try{
+		const user = await User.create(credentials)
+
+		//send code
+		await sendCode(user.secret_code, user.email)
+		res.status(StatusCodes.CREATED).json()
+	}catch(e){
+		res.status(StatusCodes.BAD_REQUEST).json({msg: 'Email already exists'})
+	}
 
 	//send code
 	sendCode(user.secret_code, user.email)
@@ -67,6 +75,7 @@ const resendCode = async(req, res)=>{
 	if(!user){
 		throw new UnauthenticatedError('Invalid Credentials')
 	}
+	const secret_code = Math.floor(Math.random() * 10000)
 	let secret_code = Math.floor(Math.random() * 10000).toString()
 	while(secret_code.length < 4){
 		secret_code += "0";

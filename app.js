@@ -55,11 +55,15 @@ const port = process.env.PORT || 3000;
 
 const start = async () => {
 	try {
-			// await sequelize.authenticate();
+			await sequelize.authenticate();
 			// await sequelize.sync({force: true});
 			// await Role.up(queryInterface, sequelize);
 			// await Category.up(queryInterface, sequelize);
 			// await Project.up(queryInterface, sequelize);
+			// app.listen(port,
+			// 	console.log(`Server is listening on port ${port}...`)
+			// );
+		server.listen(8000,'192.168.211.109',function(){
 			app.listen(port,
 				console.log(`Server is listening on port ${port}...`)
 			);
@@ -72,7 +76,7 @@ const start = async () => {
 			// 		console.log(`Server is listening on port ${port}...`)
 			// 	);
 			// })
-		// })
+		})
 	} catch (error) {
 			console.log(error);
 	}
