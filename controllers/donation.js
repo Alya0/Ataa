@@ -4,7 +4,7 @@ const {BadRequestError} = require('../errors')
 const {StatusCodes} = require('http-status-codes')
 
 const donate = async(req, res)=>{
-	const {
+	let {
 		body:{
 			value,
 			projectId
@@ -13,6 +13,8 @@ const donate = async(req, res)=>{
 			id
 		}
 	} = req
+
+	value = value/4000
 
 	const ProjectId = projectId
 	const create_payment_json = {
