@@ -1,4 +1,5 @@
 const paypal = require('paypal-rest-sdk')
+const path = require('path')
 const {Donation, Project} = require("../models")  
 const {BadRequestError} = require('../errors')
 const {StatusCodes} = require('http-status-codes')
@@ -23,8 +24,8 @@ const donate = async(req, res)=>{
 			"payment_method": "paypal"
 		},
 		"redirect_urls": {
-			"return_url": `http://192.168.43.8:8000/api/m/donate/success/${value}/${ProjectId}/${id}`,
-			"cancel_url": "http://192.168.43.8:8000/api/m/donate/cancel"
+			"return_url": `http://192.168.159.225:3000/api/m/donate/success/${value}/${ProjectId}/${id}`,
+			"cancel_url": "http://192.168.159.225:3000/api/m/donate/cancel"
 		},
 		"transactions": [{
 			"item_list": {
@@ -47,6 +48,7 @@ const donate = async(req, res)=>{
 	paypal.payment.create(create_payment_json, function(error, payment){
 		if(error){
 			res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({msg : 'Something went wrong, please try again later'})
+			// throw error
 		} else{
 			for(let i = 0; i < payment.links.length; i++){
 				if(payment.links[i].rel === 'approval_url'){
@@ -76,18 +78,17 @@ const donation_success = async(req, res)=>{
 		} else {
 			// payment = JSON.stringify(payment)
 			const date = new Date().toISOString().slice(0, 10)
-			const donation = {value, ProjectId, UserId, date}
+			const donation = {value : value*4000, ProjectId, UserId, date}
 			await Donation.create(donation)
 
 			const raised_money = await Donation.sum('value', {where: {ProjectId}})
-			console.log(raised_money);
 			const project = await Project.findByPk(ProjectId)
-			console.log(project.target_money)
 			if(raised_money >= project.target_money){
 				const updateVal = {project_status : 'منتهي'};
 				await project.update(updateVal);
 			}
-			res.status(StatusCodes.OK).send('Donation Success')
+			// res.status(StatusCodes.OK).send('Donation Success')
+			res.status(StatusCodes.OK).sendFile(path.resolve(__dirname, '../public/successfulDonation.html'))
 		}
 	})
 }

@@ -55,9 +55,10 @@ const register = async(req, res)=>{
 	credentials.secret_code = secret_code
 	try{
 		const user = await User.create(credentials)
-		sendCode(user.secret_code, user.email)
+		await sendCode(user.secret_code, user.email)
 		res.status(StatusCodes.CREATED).json()
 	}catch(e){
+		res.status(StatusCodes.BAD_REQUEST).json(e)
 		res.status(StatusCodes.BAD_REQUEST).json({msg: 'Email already exists'})
 	}
 }

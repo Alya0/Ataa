@@ -17,9 +17,11 @@ const create_volunteer = async(req, res)=>{
 		employee.status = 'معلق'
 		employee.RoleId = 4
 		employee.type = 'متطوع'
-		await Employee.create(employee)
+		employee.birth_date = new Date('10-10-2001')
+		const emp = await Employee.create(employee)
 		res.status(StatusCodes.CREATED).json();
 	}catch(e){
+		console.log(e)
 		res.status(StatusCodes.BAD_REQUEST).json({msg: 'Your registration has already been submitted'})
 	}
 }

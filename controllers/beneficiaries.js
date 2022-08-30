@@ -92,7 +92,7 @@ const edit = async(req, res)=>{
 		benef.image = req.file.path;
 	}
   if(req.body.application_status === 'accepted' || req.body.application_status === 'مقبول'){
-		sendEmail(beneficiary.full_name, beneficiary.email)
+		// await sendEmail(beneficiary.full_name, beneficiary.email)
 	}
   if(req.body.benCategories) {
 	  const categories = JSON.parse(req.body.benCategories);

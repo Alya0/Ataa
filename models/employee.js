@@ -68,13 +68,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       gender: {
         type: DataTypes.ENUM,
-        values: ["انثى", "ذكر", "غير ذلك", "female", "male", "other"],
+        values: ["أنثى", "ذكر", "غير ذلك", "female", "male", "other"],
         allowNull: true,
         notEmpty: true,
         validate: {
           notNull: false,
           notEmpty: true,
-          isIn: [["انثى", "ذكر", "غير ذلك", "female", "male", "other"]],
+          isIn: [["أنثى", "ذكر", "غير ذلك", "female", "male", "other"]],
         },
       },
       province: {
